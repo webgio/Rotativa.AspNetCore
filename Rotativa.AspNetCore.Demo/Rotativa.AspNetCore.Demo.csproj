@@ -5,11 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="wwwroot\Rotativa\wkhtmltopdf.exe" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.3" />
+    <PackageReference Include="Rotativa.AspNetCore" Version="1.0.4" />
   </ItemGroup>
 
   <ItemGroup>
@@ -17,21 +14,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="wwwroot\Rotativa\wkhtmltopdf.exe">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="Rotativa.csproj" />
-    <None Include="Rotativa.sln" />
-    <None Include="wwwroot\Rotativa\help-wkhtmltoimage.txt" />
-    <None Include="wwwroot\Rotativa\help-wkhtmltopdf.txt" />
     <None Include="wwwroot\Rotativa\wkhtmltoimage.exe" />
+    <None Include="wwwroot\Rotativa\wkhtmltopdf.exe" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Rotativa.AspNetCore\Rotativa.AspNetCore.csproj" />
+    <Content Update="C:\Users\giorgio\.nuget\packages\rotativa.aspnetcore\1.0.1\contentFiles\any\netstandard2.0\Rotativa\wkhtmltopdf.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>

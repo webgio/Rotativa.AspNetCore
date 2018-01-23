@@ -22,9 +22,10 @@ namespace Rotativa.AspNetCore
                 return _RotativaPath;
             }
         }
-        public static void Setup(IHostingEnvironment env) 
+        public static void Setup(IHostingEnvironment env, string wkhtmltopdfRelativePath = "Rotativa") 
         {
-            var rotativaPath = Path.Combine(env.WebRootPath, "Rotativa");
+            var rotativaPath = Path.Combine(env.WebRootPath, wkhtmltopdfRelativePath);
+
             _RotativaPath = rotativaPath;
         }
 
