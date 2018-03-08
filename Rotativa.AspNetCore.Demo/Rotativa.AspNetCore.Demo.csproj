@@ -6,7 +6,6 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.3" />
-    <PackageReference Include="Rotativa.AspNetCore" Version="1.0.5" />
   </ItemGroup>
 
   <ItemGroup>
@@ -16,6 +15,10 @@
   <ItemGroup>
     <None Include="wwwroot\Rotativa\wkhtmltoimage.exe" />
     <None Include="wwwroot\Rotativa\wkhtmltopdf.exe" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Rotativa.AspNetCore\Rotativa.AspNetCore.csproj" />
   </ItemGroup>
 
   <ItemGroup>

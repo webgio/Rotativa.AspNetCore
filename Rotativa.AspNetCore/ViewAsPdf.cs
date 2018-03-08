@@ -31,28 +31,31 @@ namespace Rotativa.AspNetCore
 
         public object Model { get; set; }
 
-        public ViewAsPdf()
+        public ViewDataDictionary ViewData { get; set; }
+
+        public ViewAsPdf(ViewDataDictionary viewData = null)
         {
             this.WkhtmlPath = string.Empty;
             MasterName = string.Empty;
             ViewName = string.Empty;
             Model = null;
+            ViewData = viewData;
         }
 
-        public ViewAsPdf(string viewName)
-            : this()
+        public ViewAsPdf(string viewName, ViewDataDictionary viewData = null)
+            : this(viewData)
         {
             ViewName = viewName;
         }
 
-        public ViewAsPdf(object model)
-            : this()
+        public ViewAsPdf(object model, ViewDataDictionary viewData = null)
+            : this(viewData)
         {
             Model = model;
         }
 
-        public ViewAsPdf(string viewName, object model)
-            : this()
+        public ViewAsPdf(string viewName, object model, ViewDataDictionary viewData = null)
+            : this(viewData)
         {
             ViewName = viewName;
             Model = model;
@@ -90,22 +93,31 @@ namespace Rotativa.AspNetCore
             //string html = context.GetHtmlFromView(viewResult, viewName, Model);
             ITempDataProvider tempDataProvider = context.HttpContext.RequestServices.GetService(typeof(ITempDataProvider)) as ITempDataProvider;
 
+            var viewDataDictionary = new ViewDataDictionary(
+                metadataProvider: new EmptyModelMetadataProvider(),
+                modelState: new ModelStateDictionary())
+            {
+                Model = this.Model
+            };
+            if (this.ViewData != null)
+            {
+                foreach (var item in this.ViewData)
+                {
+                    viewDataDictionary.Add(item);
+                }
+            }
             using (var output = new StringWriter())
             {
                 var view = viewResult.View;
+                var tempDataDictionary = new TempDataDictionary(context.HttpContext, tempDataProvider);
                 var viewContext = new ViewContext(
                     context,
                     viewResult.View,
-                    new ViewDataDictionary(
-                        metadataProvider: new EmptyModelMetadataProvider(),
-                        modelState: new ModelStateDictionary())
-                    {
-                        Model = this.Model
-                    },
-                    new TempDataDictionary(context.HttpContext, tempDataProvider),
+                    viewDataDictionary,
+                    tempDataDictionary,
                     output,
                     new HtmlHelperOptions());
-
+                
                 await view.RenderAsync(viewContext);
 
                 html = output.GetStringBuilder();

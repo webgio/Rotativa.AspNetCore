@@ -8,6 +8,11 @@ using Rotativa.AspNetCore.Demo.Models;
 
 namespace Rotativa.AspNetCore.Demo.Controllers
 {
+    public class TestModel
+    {
+        public string Name { get; set; }
+    }
+
     public class HomeController : Controller
     {
         public IActionResult Index()
@@ -18,8 +23,8 @@ namespace Rotativa.AspNetCore.Demo.Controllers
         public IActionResult About()
         {
             ViewData["Message"] = "Your application description page.";
-
-            return new ViewAsPdf();
+            var model = new TestModel { Name = "Giorgio" };
+            return new ViewAsPdf(model, ViewData);
         }
 
         public IActionResult Contact()

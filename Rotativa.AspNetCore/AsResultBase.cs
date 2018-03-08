@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace Rotativa.AspNetCore
 {
-    public abstract class AsResultBase : IActionResult
+    public abstract class AsResultBase : ViewResult //IActionResult
     {
         protected AsResultBase()
         {
@@ -201,7 +201,7 @@ namespace Rotativa.AspNetCore
             return fileContent;
         }
 
-        public async Task ExecuteResultAsync(ActionContext context)
+        public async override Task ExecuteResultAsync(ActionContext context)
         {
             var fileContent = await this.BuildFile(context);
 
