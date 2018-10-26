@@ -21,7 +21,7 @@ namespace Rotativa.AspNetCore
             //     "-q"  - silent output, only errors - no progress messages
             //     " -"  - switch output to stdout
             //     "- -" - switch input to stdin and output to stdout
-            switches = "-q " + switches + " -";
+            switches = switches + " -";
 
             // generate PDF from given HTML string, not from URL
             if (!string.IsNullOrEmpty(html))
@@ -68,7 +68,7 @@ namespace Rotativa.AspNetCore
                     }
                 }
 
-                string error = proc.StandardError.ReadToEnd();
+                var error = proc.StandardError.ReadToEnd();
 
                 if (ms.Length == 0)
                 {
@@ -77,7 +77,8 @@ namespace Rotativa.AspNetCore
 
                 proc.WaitForExit();
 
-                return ms.ToArray();
+                if(proc.ExitCode == 0  || proc.ExitCode == 2)
+                    return ms.ToArray();
             }
         }
 
