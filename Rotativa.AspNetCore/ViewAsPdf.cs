@@ -4,7 +4,9 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using System;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -75,7 +77,27 @@ namespace Rotativa.AspNetCore
         protected virtual ViewEngineResult GetView(ActionContext context, string viewName, string masterName)
         {
             var engine = context.HttpContext.RequestServices.GetService(typeof(ICompositeViewEngine)) as ICompositeViewEngine;
-            return engine.FindView(context, viewName, true);
+
+            var result = engine.FindView(context, viewName, true);
+
+            var getViewResult = engine.GetView(executingFilePath: null, viewPath: viewName, isMainPage: true);
+            if (getViewResult.Success)
+            {
+                return getViewResult;
+            }
+
+            var findViewResult = engine.FindView(context, viewName, isMainPage: true);
+            if (findViewResult.Success)
+            {
+                return findViewResult;
+            }
+
+            var searchedLocations = getViewResult.SearchedLocations.Concat(findViewResult.SearchedLocations);
+            var errorMessage = string.Join(
+                Environment.NewLine,
+                new[] { $"Unable to find view '{viewName}'. The following locations were searched:" }.Concat(searchedLocations));
+
+            throw new InvalidOperationException(errorMessage);
         }
 
         protected override async Task<byte[]> CallTheDriver(ActionContext context)
