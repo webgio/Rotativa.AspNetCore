@@ -78,8 +78,6 @@ namespace Rotativa.AspNetCore
         {
             var engine = context.HttpContext.RequestServices.GetService(typeof(ICompositeViewEngine)) as ICompositeViewEngine;
 
-            var result = engine.FindView(context, viewName, true);
-
             var getViewResult = engine.GetView(executingFilePath: null, viewPath: viewName, isMainPage: true);
             if (getViewResult.Success)
             {
