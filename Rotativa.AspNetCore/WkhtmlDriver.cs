@@ -79,6 +79,7 @@ namespace Rotativa.AspNetCore
 
                 if(proc.ExitCode == 0  || proc.ExitCode == 2)
                     return ms.ToArray();
+                throw new Exception(error);
             }
         }
 
