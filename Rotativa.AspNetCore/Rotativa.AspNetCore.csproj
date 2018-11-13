@@ -18,20 +18,4 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.0.1" />
   </ItemGroup>
-
-  <!--<ItemGroup>
-    <None Update="Rotativa\wkhtmltopdf.exe">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <IncludeInPackage>true</IncludeInPackage>
-      <BuildAction>Content</BuildAction>
-      <CopyToOutput>true</CopyToOutput>
-    </None>
-  </ItemGroup>-->
-
-  <!--<ItemGroup>
-    <Content Update="Rotativa\wkhtmltopdf.exe">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>-->
-
 </Project>
