@@ -1,8 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Rotativa.AspNetCore.Options;
-using System;
-using System.Linq;
+﻿using System;
 using System.Text;
+using Rotativa.AspNetCore.Options;
 
 namespace Rotativa.AspNetCore
 {
@@ -10,7 +8,7 @@ namespace Rotativa.AspNetCore
     {
         protected AsPdfResultBase()
         {
-            this.PageMargins = new Margins();
+            PageMargins = new Margins();
         }
         /// <summary>
         /// Sets the page size.
@@ -43,9 +41,9 @@ namespace Rotativa.AspNetCore
         /// </summary>
         public Margins PageMargins { get; set; }
 
-        protected override byte[] WkhtmlConvert(string switches)
+        protected override byte[] WkHtmlConvert(string switches)
         {
-            return WkhtmltopdfDriver.Convert(this.WkhtmlPath, switches);
+            return WkHtmlToPdfDriver.Convert(WkHtmlPath, switches);
         }
 
         protected override string GetContentType()
@@ -59,14 +57,8 @@ namespace Rotativa.AspNetCore
         [Obsolete("Use WkhtmlPath instead of CookieName.", false)]
         public string WkhtmltopdfPath
         {
-            get
-            {
-                return this.WkhtmlPath;
-            }
-            set
-            {
-                this.WkhtmlPath = value;
-            }
+            get => WkHtmlPath;
+            set => WkHtmlPath = value;
         }
 
         /// <summary>
@@ -91,8 +83,7 @@ namespace Rotativa.AspNetCore
         {
             var result = new StringBuilder();
 
-            if (this.PageMargins != null)
-                result.Append(this.PageMargins.ToString());
+            if (PageMargins != null) result.Append(PageMargins);
 
             result.Append(" ");
             result.Append(base.GetConvertOptions());

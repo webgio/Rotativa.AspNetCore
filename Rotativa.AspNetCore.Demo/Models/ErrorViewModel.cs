@@ -1,5 +1,3 @@
-using System;
-
 namespace Rotativa.AspNetCore.Demo.Models
 {
     public class ErrorViewModel

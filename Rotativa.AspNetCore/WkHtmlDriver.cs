@@ -5,17 +5,17 @@ using System.Text;
 
 namespace Rotativa.AspNetCore
 {
-    public abstract class WkhtmlDriver
+    public abstract class WkHtmlDriver
     {
         /// <summary>
         /// Converts given URL or HTML string to PDF.
         /// </summary>
-        /// <param name="wkhtmlPath">Path to wkthmltopdf\wkthmltoimage.</param>
+        /// <param name="wkHtmlPath">Path to wkthmltopdf\wkthmltoimage.</param>
         /// <param name="switches">Switches that will be passed to wkhtmltopdf binary.</param>
         /// <param name="html">String containing HTML code that should be converted to PDF.</param>
-        /// <param name="wkhtmlExe"></param>
+        /// <param name="wkHtmlExe"></param>
         /// <returns>PDF as byte array.</returns>
-        protected static byte[] Convert(string wkhtmlPath, string switches, string html, string wkhtmlExe)
+        protected static byte[] Convert(string wkHtmlPath, string switches, string html, string wkHtmlExe)
         {
             // switches:
             //     "-q"  - silent output, only errors - no progress messages
@@ -34,13 +34,13 @@ namespace Rotativa.AspNetCore
             {
                 StartInfo = new ProcessStartInfo
                 {
-                    FileName = Path.Combine(wkhtmlPath, wkhtmlExe),
+                    FileName = Path.Combine(wkHtmlPath, wkHtmlExe),
                     Arguments = switches,
                     UseShellExecute = false,
                     RedirectStandardOutput = true,
                     RedirectStandardError = true,
                     RedirectStandardInput = true,
-                    WorkingDirectory = wkhtmlPath,
+                    WorkingDirectory = wkHtmlPath,
                     CreateNoWindow = true
                 }
             };

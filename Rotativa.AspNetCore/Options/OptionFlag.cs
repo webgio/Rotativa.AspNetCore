@@ -4,7 +4,7 @@ namespace Rotativa.AspNetCore.Options
 {
     class OptionFlag : Attribute
     {
-        public string Name { get; private set; }
+        public string Name { get; }
 
         public OptionFlag(string name)
         {

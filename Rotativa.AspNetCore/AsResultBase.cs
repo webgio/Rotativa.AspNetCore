@@ -5,20 +5,19 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Web;
-using Rotativa.AspNetCore.Options;
-using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Rotativa.AspNetCore.Options;
 
 namespace Rotativa.AspNetCore
 {
-    public abstract class AsResultBase : ViewResult //IActionResult
+    public abstract class AsResultBase : ViewResult
     {
         protected AsResultBase()
         {
-            this.WkhtmlPath = string.Empty;
-            this.FormsAuthenticationCookieName = ".ASPXAUTH";
+            WkHtmlPath = string.Empty;
+            FormsAuthenticationCookieName = ".ASPXAUTH";
         }
 
         /// <summary>
@@ -29,7 +28,7 @@ namespace Rotativa.AspNetCore
         /// <summary>
         /// Path to wkhtmltopdf\wkhtmltoimage binary.
         /// </summary>
-        public string WkhtmlPath { get; set; }
+        public string WkHtmlPath { get; set; }
 
         /// <summary>
         /// Custom name of authentication cookie used by forms authentication.
@@ -37,8 +36,8 @@ namespace Rotativa.AspNetCore
         [Obsolete("Use FormsAuthenticationCookieName instead of CookieName.")]
         public string CookieName
         {
-            get { return this.FormsAuthenticationCookieName; }
-            set { this.FormsAuthenticationCookieName = value; }
+            get => FormsAuthenticationCookieName;
+            set => FormsAuthenticationCookieName = value;
         }
 
         /// <summary>
@@ -105,8 +104,6 @@ namespace Rotativa.AspNetCore
 
         public ContentDisposition ContentDisposition { get; set; }
 
-        protected abstract string GetUrl(ActionContext context);
-
         /// <summary>
         /// Returns properties with OptionFlag attribute as one line that can be passed to wkhtmltopdf binary.
         /// </summary>
@@ -115,16 +112,14 @@ namespace Rotativa.AspNetCore
         {
             var result = new StringBuilder();
 
-            var fields = this.GetType().GetProperties();
+            var fields = GetType().GetProperties();
             foreach (var fi in fields)
             {
                 var of = fi.GetCustomAttributes(typeof(OptionFlag), true).FirstOrDefault() as OptionFlag;
-                if (of == null)
-                    continue;
+                if (of == null) continue;
 
                 object value = fi.GetValue(this, null);
-                if (value == null)
-                    continue;
+                if (value == null) continue;
 
                 if (fi.PropertyType == typeof(Dictionary<string, string>))
                 {
@@ -136,8 +131,7 @@ namespace Rotativa.AspNetCore
                 }
                 else if (fi.PropertyType == typeof(bool))
                 {
-                    if ((bool)value)
-                        result.AppendFormat(CultureInfo.InvariantCulture, " {0}", of.Name);
+                    if ((bool)value) result.AppendFormat(CultureInfo.InvariantCulture, " {0}", of.Name);
                 }
                 else
                 {
@@ -159,13 +153,12 @@ namespace Rotativa.AspNetCore
             }
             if (authenticationCookie != null)
             {
-                //var authCookieValue = authenticationCookie.Value;
-                switches += " --cookie " + this.FormsAuthenticationCookieName + " " + authenticationCookie;
+                switches += " --cookie " + FormsAuthenticationCookieName + " " + authenticationCookie;
             }
 
-            switches += " " + this.GetConvertOptions();
+            switches += " " + GetConvertOptions();
 
-            var url = this.GetUrl(context);
+            var url = GetUrl(context);
             switches += " " + url;
 
             return switches;
@@ -173,69 +166,60 @@ namespace Rotativa.AspNetCore
 
         protected virtual async Task<byte[]> CallTheDriver(ActionContext context)
         {
-            var switches = this.GetWkParams(context);
-            var fileContent = this.WkhtmlConvert(switches);
+            var switches = GetWkParams(context);
+            var fileContent = WkHtmlConvert(switches);
             return fileContent;
         }
-        //protected abstract Task<byte[]> CallTheDriver(ActionContext context);
 
-        protected abstract byte[] WkhtmlConvert(string switches);
-
-        public async Task<byte[]> BuildFile(ActionContext context)
+        private async Task<byte[]> BuildFile(ActionContext context)
         {
-            if (context == null)
-                throw new ArgumentNullException("context");
+            if (context == null) throw new ArgumentNullException("context");
 
-            //if (this.WkhtmlPath == string.Empty)
-            //    this.WkhtmlPath = context.HttpContext.Server.MapPath("~/Rotativa");
-
-            this.WkhtmlPath = RotativaConfiguration.RotativaPath;
+            WkHtmlPath = RotativaConfiguration.RotativaPath;
 
             var fileContent = await CallTheDriver(context);
 
-            if (string.IsNullOrEmpty(this.SaveOnServerPath) == false)
+            if (string.IsNullOrEmpty(SaveOnServerPath) == false)
             {
-                File.WriteAllBytes(this.SaveOnServerPath, fileContent);
+                File.WriteAllBytes(SaveOnServerPath, fileContent);
             }
 
             return fileContent;
         }
 
-        public async override Task ExecuteResultAsync(ActionContext context)
+        public override async Task ExecuteResultAsync(ActionContext context)
         {
-            var fileContent = await this.BuildFile(context);
-
-            var response = this.PrepareResponse(context.HttpContext.Response);
+            var fileContent = await BuildFile(context);
+            var response = PrepareResponse(context.HttpContext.Response);
 
             await response.Body.WriteAsync(fileContent, 0, fileContent.Length);
         }
 
         private static string SanitizeFileName(string name)
         {
-            string invalidChars = Regex.Escape(new string(Path.GetInvalidPathChars()) + new string(Path.GetInvalidFileNameChars()));
-            string invalidCharsPattern = string.Format(@"[{0}]+", invalidChars);
-
-            string result = Regex.Replace(name, invalidCharsPattern, "_");
+            var invalidChars = Regex.Escape(new string(Path.GetInvalidPathChars()) + new string(Path.GetInvalidFileNameChars()));
+            var invalidCharsPattern = $@"[{invalidChars}]+";
+            var result = Regex.Replace(name, invalidCharsPattern, "_");
+            
             return result;
         }
 
         protected HttpResponse PrepareResponse(HttpResponse response)
         {
-            response.ContentType = this.GetContentType();
+            response.ContentType = GetContentType();
 
-            if (!String.IsNullOrEmpty(this.FileName))
-            {
-                var contentDisposition = this.ContentDisposition == ContentDisposition.Attachment
-                    ? "attachment"
-                    : "inline";
+            if (string.IsNullOrEmpty(FileName)) return response;
+            var contentDisposition = ContentDisposition == ContentDisposition.Attachment
+                ? "attachment"
+                : "inline";
 
-                response.Headers.Add("Content-Disposition", string.Format("{0}; filename=\"{1}\"", contentDisposition, SanitizeFileName(this.FileName)));
-            }
-            //response.Headers.Add("Content-Type", this.GetContentType());
+            response.Headers.Add("Content-Disposition", $"{contentDisposition}; filename=\"{SanitizeFileName(FileName)}\"");
 
             return response;
         }
 
         protected abstract string GetContentType();
+        protected abstract byte[] WkHtmlConvert(string switches);
+        protected abstract string GetUrl(ActionContext context);
     }
 }
