@@ -1,11 +1,8 @@
-﻿using iTextSharp.text.pdf;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+using iTextSharp.text.pdf;
 
 namespace Rotativa.AspNetCore.Tests
 {
@@ -44,7 +41,7 @@ namespace Rotativa.AspNetCore.Tests
                 // Create a reader for the given PDF file
                 var reader = new PdfReader(inFileName);
                 //outFile = File.CreateText(outFileName);
-                outFile = new StreamWriter(outFileName, false, System.Text.Encoding.UTF8);
+                outFile = new StreamWriter(outFileName, false, Encoding.UTF8);
 
                 Console.Write("Processing: ");
 
