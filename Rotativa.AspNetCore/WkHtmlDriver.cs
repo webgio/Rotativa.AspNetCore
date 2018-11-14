@@ -13,7 +13,6 @@ namespace Rotativa.AspNetCore
         /// <param name="wkHtmlPath">Path to wkthmltopdf\wkthmltoimage.</param>
         /// <param name="switches">Switches that will be passed to wkhtmltopdf binary.</param>
         /// <param name="html">String containing HTML code that should be converted to PDF.</param>
-        /// <param name="wkHtmlExe"></param>
         /// <returns>PDF as byte array.</returns>
         protected static byte[] Convert(string wkHtmlPath, string switches, string html)
         {

@@ -6,6 +6,13 @@ namespace Rotativa.AspNetCore.Demo.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly WkHtmlToPdfDriver _pdfDriver;
+
+        public HomeController(WkHtmlToPdfDriver pdfDriver)
+        {
+            _pdfDriver = pdfDriver;
+        }
+
         public IActionResult Index()
         {
             return View();
@@ -15,7 +22,7 @@ namespace Rotativa.AspNetCore.Demo.Controllers
         {
             ViewData["Message"] = "Your application description page.";
             var model = new TestModel { Name = "Giorgio" };
-            return new ViewAsPdf(model, new WkHtmlToPdfDriver(""), ViewData);
+            return new ViewAsPdf(model, _pdfDriver, ViewData);
         }
 
         public IActionResult Contact()

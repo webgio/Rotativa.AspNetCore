@@ -1,13 +1,22 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Rotativa.AspNetCore.Demo
 {
     public class Startup
     {
+        private readonly IConfiguration _conf;
+
+        public Startup(IConfiguration conf)
+        {
+            _conf = conf;
+        }
+
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton(p => new WkHtmlToPdfDriver(_conf["wkhtmltopdf-path"]));
             services.AddMvc();
         }
 
@@ -32,7 +41,7 @@ namespace Rotativa.AspNetCore.Demo
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
 
-            RotativaConfiguration.Setup(env);
+            //RotativaConfiguration.Setup(env);
         }
     }
 }
