@@ -33,7 +33,7 @@ namespace Rotativa.AspNetCore
 
         public ViewDataDictionary ViewData { get; set; }
 
-        public ViewAsPdf(ViewDataDictionary viewData = null)
+        public ViewAsPdf(WkHtmlToPdfDriver driver, ViewDataDictionary viewData = null) : base(driver)
         {
             WkHtmlPath = string.Empty;
             MasterName = string.Empty;
@@ -42,23 +42,23 @@ namespace Rotativa.AspNetCore
             ViewData = viewData;
         }
 
-        public ViewAsPdf(string viewName, ViewDataDictionary viewData = null) : this(viewData)
+        public ViewAsPdf(string viewName, WkHtmlToPdfDriver driver,ViewDataDictionary viewData = null) : this(driver, viewData)
         {
             ViewName = viewName;
         }
 
-        public ViewAsPdf(object model, ViewDataDictionary viewData = null) : this(viewData)
+        public ViewAsPdf(object model, WkHtmlToPdfDriver driver, ViewDataDictionary viewData = null) : this(driver, viewData)
         {
             Model = model;
         }
 
-        public ViewAsPdf(string viewName, object model, ViewDataDictionary viewData = null) : this(viewData)
+        public ViewAsPdf(string viewName, object model, WkHtmlToPdfDriver driver, ViewDataDictionary viewData = null) : this(driver, viewData)
         {
             ViewName = viewName;
             Model = model;
         }
 
-        public ViewAsPdf(string viewName, string masterName, object model) : this(viewName, model)
+        public ViewAsPdf(string viewName, string masterName, object model, WkHtmlToPdfDriver driver) : this(viewName, model, driver)
         {
             MasterName = masterName;
         }
@@ -111,7 +111,7 @@ namespace Rotativa.AspNetCore
             string baseUrl = string.Format("{0}://{1}", context.HttpContext.Request.Scheme, context.HttpContext.Request.Host);
             var htmlForWkHtml = Regex.Replace(html.ToString(), "<head>", $"<head><base href=\"{baseUrl}\" />", RegexOptions.IgnoreCase);
 
-            byte[] fileContent = WkHtmlToPdfDriver.ConvertHtml(WkHtmlPath, GetConvertOptions(), htmlForWkHtml);
+            byte[] fileContent = Driver.ConvertHtml(GetConvertOptions(), htmlForWkHtml);
             return fileContent;
         }
     }

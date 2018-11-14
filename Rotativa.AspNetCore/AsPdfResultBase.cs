@@ -6,8 +6,11 @@ namespace Rotativa.AspNetCore
 {
     public abstract class AsPdfResultBase : AsResultBase
     {
-        protected AsPdfResultBase()
+        protected readonly WkHtmlToPdfDriver Driver;
+
+        protected AsPdfResultBase(WkHtmlToPdfDriver driver)
         {
+            Driver = driver;
             PageMargins = new Margins();
         }
         /// <summary>
@@ -43,7 +46,7 @@ namespace Rotativa.AspNetCore
 
         protected override byte[] WkHtmlConvert(string switches)
         {
-            return WkHtmlToPdfDriver.Convert(WkHtmlPath, switches);
+            return Driver.Convert(switches);
         }
 
         protected override string GetContentType()

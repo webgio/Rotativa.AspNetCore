@@ -1,30 +1,36 @@
-﻿namespace Rotativa.AspNetCore
+﻿using System.IO;
+
+namespace Rotativa.AspNetCore
 {
     public class WkHtmlToPdfDriver : WkHtmlDriver
     {
-        private const string WkHtmlExe = "wkhtmltopdf.exe";
+        private readonly string _wkHtmlToPdfPath;
+
+        public WkHtmlToPdfDriver(string wkHtmlToPdfPath)
+        {
+            if(File.Exists(wkHtmlToPdfPath))
+            _wkHtmlToPdfPath = Path.GetFullPath(wkHtmlToPdfPath);
+        }
 
         /// <summary>
         /// Converts given HTML string to PDF.
         /// </summary>
-        /// <param name="wkHtmlToPdfPath">Path to wkthmltopdf.</param>
         /// <param name="switches">Switches that will be passed to wkhtmltopdf binary.</param>
         /// <param name="html">String containing HTML code that should be converted to PDF.</param>
         /// <returns>PDF as byte array.</returns>
-        public static byte[] ConvertHtml(string wkHtmlToPdfPath, string switches, string html)
+        public byte[] ConvertHtml(string switches, string html)
         {
-            return Convert(wkHtmlToPdfPath, switches, html, WkHtmlExe);
+            return Convert(_wkHtmlToPdfPath, switches, html);
         }
 
         /// <summary>
         /// Converts given URL to PDF.
         /// </summary>
-        /// <param name="wkHtmlToPdfPath">Path to wkthmltopdf.</param>
         /// <param name="switches">Switches that will be passed to wkhtmltopdf binary.</param>
         /// <returns>PDF as byte array.</returns>
-        public static byte[] Convert(string wkHtmlToPdfPath, string switches)
+        public byte[] Convert(string switches)
         {
-            return Convert(wkHtmlToPdfPath, switches, null, WkHtmlExe);
+            return Convert(_wkHtmlToPdfPath, switches, null);
         }
     }
 }

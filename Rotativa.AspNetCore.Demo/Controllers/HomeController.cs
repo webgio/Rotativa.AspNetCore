@@ -15,7 +15,7 @@ namespace Rotativa.AspNetCore.Demo.Controllers
         {
             ViewData["Message"] = "Your application description page.";
             var model = new TestModel { Name = "Giorgio" };
-            return new ViewAsPdf(model, ViewData);
+            return new ViewAsPdf(model, new WkHtmlToPdfDriver(""), ViewData);
         }
 
         public IActionResult Contact()

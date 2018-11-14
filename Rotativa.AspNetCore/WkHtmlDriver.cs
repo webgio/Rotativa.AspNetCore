@@ -15,7 +15,7 @@ namespace Rotativa.AspNetCore
         /// <param name="html">String containing HTML code that should be converted to PDF.</param>
         /// <param name="wkHtmlExe"></param>
         /// <returns>PDF as byte array.</returns>
-        protected static byte[] Convert(string wkHtmlPath, string switches, string html, string wkHtmlExe)
+        protected static byte[] Convert(string wkHtmlPath, string switches, string html)
         {
             // switches:
             //     "-q"  - silent output, only errors - no progress messages
@@ -34,13 +34,13 @@ namespace Rotativa.AspNetCore
             {
                 StartInfo = new ProcessStartInfo
                 {
-                    FileName = Path.Combine(wkHtmlPath, wkHtmlExe),
+                    FileName = wkHtmlPath,
                     Arguments = switches,
                     UseShellExecute = false,
                     RedirectStandardOutput = true,
                     RedirectStandardError = true,
                     RedirectStandardInput = true,
-                    WorkingDirectory = wkHtmlPath,
+                    WorkingDirectory = Path.GetDirectoryName(wkHtmlPath),
                     CreateNoWindow = true
                 }
             };

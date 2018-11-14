@@ -5,8 +5,13 @@
   </PropertyGroup>
   
   <ItemGroup>
+    <PackageReference Include="iTextSharp" Version="5.5.13" />
     <PackageReference Include="xunit" Version="2.4.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1" />
     <DotNetCliToolReference Include="dotnet-xunit" Version="2.3.1" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\Rotativa.AspNetCore\Rotativa.AspNetCore.csproj" />
   </ItemGroup>
 </Project>
