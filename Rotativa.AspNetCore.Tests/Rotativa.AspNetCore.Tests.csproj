@@ -64,9 +64,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AboutTest.cs" />
     <Compile Include="PDFParser.cs" />
     <Compile Include="PdfTester.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RelativePathTest.cs" />
+    <Compile Include="RotativaBaseTest.cs" />
     <Compile Include="RotativaTests.cs" />
   </ItemGroup>
   <ItemGroup>

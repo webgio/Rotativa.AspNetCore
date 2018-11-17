@@ -31,7 +31,7 @@ namespace Rotativa.AspNetCore.Demo.Controllers
         {
             ViewData["Message"] = "Your contact page.";
 
-            return View();
+            return new ViewAsPdf("~/Views/Home/Contact.cshtml", viewData: ViewData);
         }
 
         public IActionResult Error()

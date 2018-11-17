@@ -1,5 +1,4 @@
-﻿using OpenQA.Selenium;
-using OpenQA.Selenium.Chrome;
+﻿using OpenQA.Selenium.Chrome;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -13,51 +12,14 @@ using Xunit;
 
 namespace Rotativa.AspNetCore.Tests
 {
-    [Trait("Rotativa.AspNetCore", "")]
-    public class RotativaTests: IDisposable
+
+    [Trait("Rotativa.AspNetCore", "accessing the demo site home page")]
+    public class RotativaTests: RotativaBaseTest
     {
-        private IWebDriver selenium;
-        private StringBuilder verificationErrors;
-
-        public RotativaTests()
-        {
-            TestSetUp();
-        }
-
-        public void TestSetUp()
-        {
-            selenium = new ChromeDriver();
-            //selenium = new InternetExplorerDriver();
-            selenium.Manage().Timeouts().ImplicitWait = new TimeSpan(0, 0, 10);
-            verificationErrors = new StringBuilder();
-            var rotativaDemoUrl = "http://localhost:65123";//ConfigurationManager.AppSettings["RotativaDemoUrl"];
-            selenium.Navigate().GoToUrl(rotativaDemoUrl);
-        }
-
-        public void Dispose()
-        {
-            if (selenium != null) selenium.Quit();
-        }
-
-        [Fact]
+        [Fact(DisplayName ="should return the demo home page")]
         public void Is_the_site_reachable()
         {
             Assert.Equal("Home Page - Rotativa.AspNetCore.Demo", selenium.Title);
-        }
-        
-        [Fact]
-        public void Can_print_the_test_pdf()
-        {
-            var testLink = selenium.FindElement(By.LinkText("About"));
-            var pdfHref = testLink.GetAttribute("href");
-            using (var wc = new WebClient())
-            {
-                var pdfResult = wc.DownloadData(new Uri(pdfHref));
-                var pdfTester = new PdfTester();
-                pdfTester.LoadPdf(pdfResult);
-                Assert.True(pdfTester.PdfIsValid);
-                Assert.True(pdfTester.PdfContains("About"));
-            }
         }
 
         //[Fact]
@@ -89,7 +51,7 @@ namespace Rotativa.AspNetCore.Tests
         //        image.RawFormat.Should().Be.EqualTo(ImageFormat.Png);
         //    }
         //}
-        
+
         //[Fact]
         //public void Can_print_the_authorized_pdf()
         //{
@@ -102,7 +64,7 @@ namespace Rotativa.AspNetCore.Tests
         //    var pdfHref = testLink.GetAttribute("href");
         //    var loginLink = selenium.FindElement(By.ClassName("logon"));
         //    loginLink.Click();
-            
+
         //    var username = selenium.FindElement(By.Id("UserName"));
         //    username.SendKeys("admin");
         //    var password = selenium.FindElement(By.Id("Password"));
@@ -164,7 +126,7 @@ namespace Rotativa.AspNetCore.Tests
         //[Fact]
         //public void Can_print_the_pdf_from_a_view()
         //{
-            
+
         //    var testLink = selenium.FindElement(By.LinkText("Test View"));
         //    var pdfHref = testLink.GetAttribute("href");
         //    using (var wc = new WebClient())
@@ -191,7 +153,7 @@ namespace Rotativa.AspNetCore.Tests
         //        image.RawFormat.Should().Be.EqualTo(ImageFormat.Jpeg);
         //    }
         //}
-        
+
         //[Fact]
         //public void Can_print_the_pdf_from_a_view_with_non_ascii_chars()
         //{
