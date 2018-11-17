@@ -30,7 +30,7 @@ namespace Rotativa.AspNetCore.Tests
             //selenium = new InternetExplorerDriver();
             selenium.Manage().Timeouts().ImplicitWait = new TimeSpan(0, 0, 10);
             verificationErrors = new StringBuilder();
-            var rotativaDemoUrl = "http://localhost:59941";//ConfigurationManager.AppSettings["RotativaDemoUrl"];
+            var rotativaDemoUrl = "http://localhost:65123";//ConfigurationManager.AppSettings["RotativaDemoUrl"];
             selenium.Navigate().GoToUrl(rotativaDemoUrl);
         }
 

@@ -1,8 +1,15 @@
-﻿namespace Rotativa.AspNetCore
+﻿using System.IO;
+using System.Runtime.InteropServices;
+
+namespace Rotativa.AspNetCore
 {
     public class WkhtmltopdfDriver : WkhtmlDriver
     {
-        private const string wkhtmlExe = "wkhtmltopdf.exe";
+        /// <summary>
+        /// wkhtmltopdf only has a .exe extension in Windows.
+        /// </summary>
+        private static readonly string wkhtmlExe =
+            RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "wkhtmltopdf.exe" : "wkhtmltopdf";
 
         /// <summary>
         /// Converts given HTML string to PDF.
@@ -28,3 +35,4 @@
         }
     }
 }
+
