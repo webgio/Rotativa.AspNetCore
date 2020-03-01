@@ -1,8 +1,14 @@
+using System.Runtime.InteropServices;
+
 namespace Rotativa.AspNetCore
 {
     public class WkhtmltoimageDriver : WkhtmlDriver
     {
-        private const string wkhtmlExe = "wkhtmltoimage.exe";
+        /// <summary>
+        /// wkhtmltoimage only has a .exe extension in Windows.
+        /// </summary>
+        private static readonly string wkhtmlExe =
+            RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "wkhtmltoimage.exe" : "wkhtmltoimage";
         
         /// <summary>
         /// Converts given HTML string to Image.
