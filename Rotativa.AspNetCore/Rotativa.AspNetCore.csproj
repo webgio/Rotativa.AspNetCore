@@ -1,7 +1,7 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFrameworks>netcoreapp3.0;netstandard2.0</TargetFrameworks>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Version>1.1.1</Version>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
@@ -15,9 +15,19 @@
     <Copyright>2018 Viva Software di Bozio Giorgio</Copyright>
   </PropertyGroup>
 
-  <ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+    <PackageReference Include="Microsoft.AspNetCore" Version="2.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.0.1" />
   </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp3.0'">
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <!--<ItemGroup Condition="">
+    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.0.1" />
+  </ItemGroup>-->
+
 
   <!--<ItemGroup>
     <None Update="Rotativa\wkhtmltopdf.exe">
