@@ -43,11 +43,11 @@ namespace Rotativa.AspNetCore
         /// <summary>
         /// Setup Rotativa library
         /// </summary>
-        /// <param name="RootPath">The path to the web-servable application files.</param>
+        /// <param name="rootPath">The path to the web-servable application files.</param>
         /// <param name="wkhtmltopdfRelativePath">Optional. Relative path to the directory containing wkhtmltopdf.exe. Default is "Rotativa". Download at https://wkhtmltopdf.org/downloads.html</param>
-        public static void Setup(string RootPath, string wkhtmltopdfRelativePath = "Rotativa")
+        public static void Setup(string rootPath, string wkhtmltopdfRelativePath = "Rotativa")
         {
-            var rotativaPath = Path.Combine(RootPath, wkhtmltopdfRelativePath);
+            var rotativaPath = Path.Combine(rootPath, wkhtmltopdfRelativePath);
 
             if (!Directory.Exists(rotativaPath))
             {
