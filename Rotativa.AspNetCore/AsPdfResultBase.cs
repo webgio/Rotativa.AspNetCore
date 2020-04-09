@@ -39,6 +39,12 @@ namespace Rotativa.AspNetCore
         public Orientation? PageOrientation { get; set; }
 
         /// <summary>
+        /// Sets the page zoom.
+        /// </summary>
+        [OptionFlag("--zoom")]
+        public double? Zoom { get; set; }
+
+        /// <summary>
         /// Sets the page margins.
         /// </summary>
         public Margins PageMargins { get; set; }
