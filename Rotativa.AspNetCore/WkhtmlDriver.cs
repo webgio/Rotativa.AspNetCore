@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace Rotativa.AspNetCore
@@ -30,6 +31,15 @@ namespace Rotativa.AspNetCore
                 html = SpecialCharsEncode(html);
             }
 
+            var g = Guid.NewGuid();
+            var prePath = "/tmp/rotativa_reports";
+            var generatedPdfFile = Path.Combine(prePath, $"{g}.pdf");
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
+                Directory.CreateDirectory(prePath);
+                switches += $" {generatedPdfFile}";
+            }
+
             var proc = new Process
             {
                 StartInfo = new ProcessStartInfo
@@ -57,25 +67,37 @@ namespace Rotativa.AspNetCore
 
             using (var ms = new MemoryStream())
             {
-                using (var sOut = proc.StandardOutput.BaseStream)
+                if (!RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
                 {
-                    byte[] buffer = new byte[4096];
-                    int read;
-
-                    while ((read = sOut.Read(buffer, 0, buffer.Length)) > 0)
+                    using (var sOut = proc.StandardOutput.BaseStream)
                     {
-                        ms.Write(buffer, 0, read);
+                        byte[] buffer = new byte[4096];
+                        int read;
+
+                        while ((read = sOut.Read(buffer, 0, buffer.Length)) > 0)
+                        {
+                            ms.Write(buffer, 0, read);
+                        }
+                    }
+
+                    string error = proc.StandardError.ReadToEnd();
+
+                    if (ms.Length == 0)
+                    {
+                        throw new Exception(error);
                     }
                 }
 
-                string error = proc.StandardError.ReadToEnd();
-
-                if (ms.Length == 0)
-                {
-                    throw new Exception(error);
-                }
-
                 proc.WaitForExit();
+
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+                {
+                    using (var fileStream = new FileStream(generatedPdfFile, FileMode.Open, FileAccess.Read))
+                    {
+                        fileStream.CopyTo(ms);
+                    }
+                    File.Delete(generatedPdfFile);
+                }
 
                 return ms.ToArray();
             }
