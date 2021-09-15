@@ -22,7 +22,7 @@ namespace Rotativa.DotNet5
         /// <summary>
         /// Setup Rotativa library
         /// </summary>
-        /// <param name="env">The IHostingEnvironment object</param>
+        /// <param name="env">The IWebHostEnvironment object</param>
         /// <param name="wkhtmltopdfRelativePath">Optional. Relative path to the directory containing wkhtmltopdf.exe. Default is "Rotativa". Download at https://wkhtmltopdf.org/downloads.html</param>
         public static void Setup(IWebHostEnvironment env)
         {
