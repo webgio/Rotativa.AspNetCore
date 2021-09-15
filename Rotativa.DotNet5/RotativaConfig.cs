@@ -26,7 +26,7 @@ namespace Rotativa.DotNet5
         /// <param name="wkhtmltopdfRelativePath">Optional. Relative path to the directory containing wkhtmltopdf.exe. Default is "Rotativa". Download at https://wkhtmltopdf.org/downloads.html</param>
         public static void Setup(IWebHostEnvironment env)
         {
-            var rotativaPath = string.Empty;
+            string rotativaPath;
             if (env.EnvironmentName == "Development")
             {
                 rotativaPath = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "wwwroot", "Rotativa");
@@ -42,11 +42,6 @@ namespace Rotativa.DotNet5
             }
 
             _RotativaPath = rotativaPath;
-        }
-        private static string GetAssemblyName()
-        {
-            var assembly = typeof(RotativaConfiguration).Assembly;
-            return assembly.FullName;
         }
     }
 }
