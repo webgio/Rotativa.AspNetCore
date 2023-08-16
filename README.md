@@ -30,3 +30,8 @@ Make sure you have a folder with the wkhtmltopdf.exe file accessible by the proc
 
 ## Issues and Pull Request
 Contribution is welcomed. If you would like to provide a PR please add some testing.
+
+
+## rotativa.io
+
+[rotativa.io](https://rotativa.io) is an API (SaaS) version of Rotativa, hosted on Azure. Works with just a HTTP call, no need to host the process on your server. You can register for free.
