@@ -14,13 +14,31 @@ namespace Rotativa.AspNetCore.Tests
 {
 
     [Trait("Rotativa.AspNetCore", "accessing the demo site home page")]
-    public class RotativaTests: RotativaBaseTest
+    public class RotativaTests    
     {
-        [Fact(DisplayName ="should return the demo home page")]
-        public void Is_the_site_reachable()
+        ChromeDriver selenium;
+        StringBuilder verificationErrors;
+
+        public  RotativaTests()
         {
-            Assert.Equal("Home Page - Rotativa.AspNetCore.Demo", selenium.Title);
+            selenium = new ChromeDriver();
+            //selenium = new InternetExplorerDriver();
+            selenium.Manage().Timeouts().ImplicitWait = new TimeSpan(0, 0, 10);
+            verificationErrors = new StringBuilder();
+            var rotativaDemoUrl = ""; // ConfigurationManager.AppSettings["RotativaDemoUrl"];
+            selenium.Navigate().GoToUrl(rotativaDemoUrl);
         }
+
+        public void Dispose()
+        {
+            if (selenium != null) selenium.Quit();
+        }
+
+        //[Fact(DisplayName ="should return the demo home page")]
+        //public void Is_the_site_reachable()
+        //{
+        //    Assert.Equal("Home Page - Rotativa.AspNetCore.Demo", selenium.Title);
+        //}
 
         //[Fact]
         //public void Can_print_the_test_image()

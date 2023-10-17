@@ -5,11 +5,18 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Web;
 using Rotativa.AspNetCore.Options;
-using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+#if NET6_0_OR_GREATER
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Http;
+#elif NETSTANDARD2_1
+    using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Mvc;
+#elif NETSTANDARD2_0
+    using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Mvc;
+#endif
 
 namespace Rotativa.AspNetCore
 {
@@ -105,7 +112,7 @@ namespace Rotativa.AspNetCore
 
         public ContentDisposition ContentDisposition { get; set; }
 
-        protected abstract string GetUrl(ActionContext context);
+        protected abstract string GetUrl(Microsoft.AspNetCore.Mvc.ActionContext context);
 
         /// <summary>
         /// Returns properties with OptionFlag attribute as one line that can be passed to wkhtmltopdf binary.
