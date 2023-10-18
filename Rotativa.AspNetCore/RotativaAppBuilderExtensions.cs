@@ -13,8 +13,6 @@ using Microsoft.AspNetCore.Builder;
 
 namespace Rotativa.AspNetCore
 {
-
-
 #if NET5_0
     public static class RotativaAppBuilderExtensions
     {
