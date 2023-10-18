@@ -1,16 +1,16 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>netstandard2.0;netcoreapp3.1;net6;net5.0</TargetFrameworks>
+		<TargetFrameworks>netstandard2.0;netcoreapp3.1;net6;net5.0;net7</TargetFrameworks>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-		<Version>1.3.0-beta</Version>
+		<Version>1.3.2-beta</Version>
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 		<RepositoryUrl>https://github.com/webgio/Rotativa.AspNetCore</RepositoryUrl>
 		<PackageProjectUrl>https://github.com/webgio/Rotativa.AspNetCore</PackageProjectUrl>
 		<Company>Viva Software di Bozio Giorgio</Company>
 		<Authors>Giorgio Bozio</Authors>
 		<Description>Rotativa: PDF easy creation for Asp.Net 6 and Asp.Net Core</Description>
-		<PackageReleaseNotes>Setup for .net core</PackageReleaseNotes>
+		<PackageReleaseNotes>Multi target enabling .net core 3.1, .net 5, .net 6</PackageReleaseNotes>
 		<PackageTags>PDF AspNetCore</PackageTags>
 		<Copyright>2023 Viva Software di Bozio Giorgio</Copyright>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -29,6 +29,10 @@
 	<!--<ItemGroup Condition=" '$(TargetFramework)' == 'net6.0' ">
 		<PackageReference Include="Microsoft.AspNetCore.App.Ref" Version="6.0.16" />
 	</ItemGroup>-->
+
+	<ItemGroup Condition=" '$(TargetFramework)' == 'net7' ">
+		<FrameworkReference Include="Microsoft.AspNetCore.App" />
+	</ItemGroup>
 
 	<ItemGroup Condition=" '$(TargetFramework)' == 'net6' ">
 		<FrameworkReference Include="Microsoft.AspNetCore.App" />
