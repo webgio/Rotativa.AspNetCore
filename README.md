@@ -4,10 +4,7 @@ Rotativa for Asp.Net Core, easy Pdf from Razor views for .Net core 3.1, .Net 5, 
 
 Docs are in the making. Should work almost exactly as Rotativa https://github.com/webgio/Rotativa
 
-## Development version
-This is the first version of Rotativa for Asp.Net Core.
-
-Install with nuget.org:
+## Install with nuget.org:
 
 https://www.nuget.org/packages/Rotativa.AspNetCore
 
