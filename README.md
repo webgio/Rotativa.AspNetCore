@@ -1,6 +1,6 @@
-# Rotativa.AspNetCore
+# Rotativa.AspNetCore for .Net core 3.1, .Net 5, .Net 6, .Net 7
 
-Rotativa for Asp.Net Core.
+Rotativa for Asp.Net Core, easy Pdf from Razor views for .Net core 3.1, .Net 5, .Net 6, .Net 7.
 
 Docs are in the making. Should work almost exactly as Rotativa https://github.com/webgio/Rotativa
 
