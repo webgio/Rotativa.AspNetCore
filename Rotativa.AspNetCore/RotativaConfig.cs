@@ -14,9 +14,7 @@ namespace Rotativa.AspNetCore
             {
                 if (string.IsNullOrEmpty(_RotativaPath))
                 {
-#if NET45
-                    _RotativaUrl = System.Configuration.ConfigurationManager.AppSettings["RotativaUrl"];
-#endif
+                    throw new ArgumentNullException(nameof(RotativaPath));
                 }
                 return _RotativaPath;
             }
@@ -41,24 +39,6 @@ namespace Rotativa.AspNetCore
         }
 #endif
 
-#if NETCOREAPP3_1
-        /// <summary>
-        /// Setup Rotativa library
-        /// </summary>
-        /// <param name="env">The IHostingEnvironment object</param>
-        /// <param name="wkhtmltopdfRelativePath">Optional. Relative path to the directory containing wkhtmltopdf.exe. Default is "Rotativa". Download at https://wkhtmltopdf.org/downloads.html</param>
-        public static void Setup(Microsoft.AspNetCore.Hosting.IHostingEnvironment env, string wkhtmltopdfRelativePath = "Rotativa") 
-        {
-            var rotativaPath = Path.Combine(env.WebRootPath, wkhtmltopdfRelativePath);
-
-            if (!Directory.Exists(rotativaPath))
-            {
-                throw new ApplicationException("Folder containing wkhtmltopdf.exe not found, searched for " + rotativaPath);
-            }
-
-            _RotativaPath = rotativaPath;
-        }
-#endif
         /// <summary>
         /// Setup Rotativa library
         /// </summary>

@@ -3,16 +3,16 @@
 	<PropertyGroup>
 		<TargetFrameworks>netstandard2.0;netcoreapp3.1;net6</TargetFrameworks>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-		<Version>1.2.0</Version>
+		<Version>1.3.0-beta</Version>
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 		<RepositoryUrl>https://github.com/webgio/Rotativa.AspNetCore</RepositoryUrl>
 		<PackageProjectUrl>https://github.com/webgio/Rotativa.AspNetCore</PackageProjectUrl>
 		<Company>Viva Software di Bozio Giorgio</Company>
 		<Authors>Giorgio Bozio</Authors>
-		<Description>Rotativa: PDF easy creation for Asp.Net Core</Description>
+		<Description>Rotativa: PDF easy creation for Asp.Net 6 and Asp.Net Core</Description>
 		<PackageReleaseNotes>Setup for .net core</PackageReleaseNotes>
 		<PackageTags>PDF AspNetCore</PackageTags>
-		<Copyright>2021 Viva Software di Bozio Giorgio</Copyright>
+		<Copyright>2023 Viva Software di Bozio Giorgio</Copyright>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 	</PropertyGroup>
 
