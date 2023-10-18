@@ -15,15 +15,15 @@ https://www.nuget.org/packages/Rotativa.AspNetCore
 Please give feedback!
 
 ## Needs configuration
-Basic configuration done in Startup.cs:
+Basic configuration done in Program.cs (.net 6 or 7):
 
 ```csharp
-RotativaConfiguration.Setup(env);
+app.UseRotativa();
 ```
-or, if using Asp.net Core 3.0:
+or, if using .Net Core 3.1 and .Net 5:
 
 ```csharp
-RotativaConfiguration.Setup("<root path here>", "path/relative/to/root");
+app.UseRotativa(env);
 ```
 
 Make sure you have a folder with the wkhtmltopdf.exe file accessible by the process running the web app. By default it searches in a folder named "Rotativa" in the root of the web app. If you need to change that use the optional parameter to the Setup call `RotativaConfiguration.Setup(env, "path/relative/to/root")`
