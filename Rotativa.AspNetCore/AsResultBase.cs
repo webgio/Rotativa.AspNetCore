@@ -7,7 +7,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using Rotativa.AspNetCore.Options;
 using System.Threading.Tasks;
-#if NET6_0_OR_GREATER
+#if NET5_0_OR_GREATER
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Http;
 #elif NETCOREAPP3_1
