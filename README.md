@@ -12,7 +12,7 @@ https://www.nuget.org/packages/Rotativa.AspNetCore
 Please give feedback!
 
 ## Needs configuration
-Basic configuration done in Program.cs (.net 6 or 7):
+Basic configuration done in Program.cs (.net 6 or 7, beta package):
 
 ```csharp
 app.UseRotativa();
