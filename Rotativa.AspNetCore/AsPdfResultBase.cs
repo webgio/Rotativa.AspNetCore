@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Rotativa.AspNetCore.Options;
+﻿using Rotativa.AspNetCore.Options;
 using System;
 using System.Linq;
 using System.Text;
