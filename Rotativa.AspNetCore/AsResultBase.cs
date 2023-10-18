@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 #if NET6_0_OR_GREATER
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Http;
-#elif NETSTANDARD2_1
+#elif NETCOREAPP3_1
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
 #elif NETSTANDARD2_0

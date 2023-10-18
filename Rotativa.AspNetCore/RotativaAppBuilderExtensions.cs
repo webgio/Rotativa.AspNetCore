@@ -1,13 +1,17 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection;
+﻿
 using System;
-using System.Collections.Generic;
-using System.Text;
+#if NETCOREAPP3_1
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Builder;
+#elif NET6_0_OR_GREATER
+using Microsoft.AspNetCore.Builder;
+#endif
+
 
 namespace Rotativa.AspNetCore
 {
 #if NET6_0_OR_GREATER
-    public static class MvcServiceCollectionExtensions
+    public static class RotativaAppBuilderExtensions
     {
         public static IApplicationBuilder UseRotativa(this IApplicationBuilder app) 
         {
@@ -25,5 +29,27 @@ namespace Rotativa.AspNetCore
         }
 
     }
-#endif
+# endif
+
+#if NETCOREAPP3_1
+    public static class RotativaAppBuilderExtensions
+    {
+        public static IApplicationBuilder UseRotativa(this IApplicationBuilder app, Microsoft.AspNetCore.Hosting.IWebHostEnvironment env) 
+        {
+            var webApp = app as ApplicationBuilder;
+
+            if (webApp == null) 
+            {
+                throw new Exception("Sorry, you can use Rotativa only in a WebApplication");
+            }
+
+            RotativaConfiguration.Setup(env.WebRootPath);
+
+            return app;
+
+        }
+
+    }
+# endif
+
 }

@@ -52,6 +52,7 @@ namespace Rotativa.AspNetCore.DemoCore
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
+            app.UseRotativa(env);
         }
     }
 }

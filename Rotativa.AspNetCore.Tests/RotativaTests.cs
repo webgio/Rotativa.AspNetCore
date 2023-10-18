@@ -1,4 +1,5 @@
-﻿using OpenQA.Selenium.Chrome;
+﻿using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -25,8 +26,6 @@ namespace Rotativa.AspNetCore.Tests
             //selenium = new InternetExplorerDriver();
             selenium.Manage().Timeouts().ImplicitWait = new TimeSpan(0, 0, 10);
             verificationErrors = new StringBuilder();
-            var rotativaDemoUrl = ""; // ConfigurationManager.AppSettings["RotativaDemoUrl"];
-            selenium.Navigate().GoToUrl(rotativaDemoUrl);
         }
 
         public void Dispose()
@@ -34,11 +33,35 @@ namespace Rotativa.AspNetCore.Tests
             if (selenium != null) selenium.Quit();
         }
 
-        //[Fact(DisplayName ="should return the demo home page")]
-        //public void Is_the_site_reachable()
-        //{
-        //    Assert.Equal("Home Page - Rotativa.AspNetCore.Demo", selenium.Title);
-        //}
+        [Theory(DisplayName = "should return the demo home page")]
+        //[InlineData("http://localhost:64310", "Asp.net core 2.0")]
+        //[InlineData("https://localhost:44375", "Asp.net core 3.1")]
+        [InlineData("https://localhost:7059", "Asp.net 6")]
+        public void Is_the_site_reachable(string url, string site)
+        {
+            selenium.Navigate().GoToUrl(url);
+            Assert.Equal("Home Page - Rotativa.AspNetCore.Demo", selenium.Title);
+        }
+
+        [Theory(DisplayName = "can get the PDF from the contact link")]
+        //[InlineData("http://localhost:64310", "Asp.net core 2.0")]
+        //[InlineData("https://localhost:44375", "Asp.net core 3.1")]
+        [InlineData("https://localhost:7059", "Asp.net 6")]
+        public void Contact_PDF(string url, string site)
+        {
+            selenium.Navigate().GoToUrl(url);
+            var testLink = selenium.FindElement(By.LinkText("Contact"));
+            var pdfHref = testLink.GetAttribute("href");
+            using (var wc = new WebClient())
+            {
+                var pdfResult = wc.DownloadData(new Uri(pdfHref));
+                var pdfTester = new PdfTester();
+                pdfTester.LoadPdf(pdfResult);
+                Assert.True(pdfTester.PdfIsValid);
+                Assert.True(pdfTester.PdfContains("Your contact page."));
+                //        pdfTester.PdfContains("admin").Should().Be.True();
+            }
+        }
 
         //[Fact]
         //public void Can_print_the_test_image()

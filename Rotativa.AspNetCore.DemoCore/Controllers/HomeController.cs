@@ -23,6 +23,12 @@ namespace Rotativa.AspNetCore.DemoCore.Controllers
             return View();
         }
 
+        public IActionResult Contact()
+        {
+            ViewData["Message"] = "Your contact page.";
+            return new ViewAsPdf(viewData: ViewData);
+        }
+
         public IActionResult Privacy()
         {
             return View();

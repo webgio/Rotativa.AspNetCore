@@ -12,7 +12,7 @@ using System.Threading.Tasks;
     using Microsoft.AspNetCore.Mvc.ViewEngines;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Rendering;
-#elif NETSTANDARD2_1_OR_GREATER
+#elif NETCOREAPP3_1_OR_GREATER
     using Microsoft.AspNetCore.Mvc.ViewFeatures;
     using Microsoft.AspNetCore.Mvc.ModelBinding;
     using Microsoft.AspNetCore.Mvc.ViewEngines;
