@@ -14,6 +14,7 @@
 		<PackageTags>PDF AspNetCore</PackageTags>
 		<Copyright>2023 Viva Software di Bozio Giorgio</Copyright>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
 	</PropertyGroup>
 
 	<!--<ItemGroup>
@@ -43,8 +44,12 @@
 	</ItemGroup>
 
 	<ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0'">
-		<PackageReference  Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
 		<!--<FrameworkReference Include="System.Web.Mvc" />-->
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="README.md" Pack="true" PackagePath="\"/>
 	</ItemGroup>
 
 	<!--<ItemGroup>

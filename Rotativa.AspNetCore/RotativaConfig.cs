@@ -14,7 +14,7 @@ namespace Rotativa.AspNetCore
             {
                 if (string.IsNullOrEmpty(_RotativaPath))
                 {
-                    throw new ArgumentNullException(nameof(RotativaPath));
+                    throw new ArgumentNullException(nameof(RotativaPath), "Check the readme file for configuration instructions");
                 }
                 return _RotativaPath;
             }
