@@ -1,13 +1,10 @@
-# Rotativa.AspNetCore
+# Rotativa.AspNetCore for .Net core 3.1, .Net 5, .Net 6, .Net 7
 
-Rotativa for Asp.Net Core.
+Rotativa for Asp.Net Core, easy Pdf from Razor views for .Net core 3.1, .Net 5, .Net 6, .Net 7.
 
 Docs are in the making. Should work almost exactly as Rotativa https://github.com/webgio/Rotativa
 
-## Development version
-This is the first version of Rotativa for Asp.Net Core.
-
-Install with nuget.org:
+## Install with nuget.org:
 
 https://www.nuget.org/packages/Rotativa.AspNetCore
 
@@ -15,7 +12,7 @@ https://www.nuget.org/packages/Rotativa.AspNetCore
 Please give feedback!
 
 ## Needs configuration
-Basic configuration done in Program.cs (.net 6 or 7):
+Basic configuration done in Program.cs (.net 6 or 7, beta package):
 
 ```csharp
 app.UseRotativa();
