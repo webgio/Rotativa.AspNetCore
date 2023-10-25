@@ -1,0 +1,24 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+   <!--<Target Name="CopyScriptsToProject" BeforeTargets="Build">
+      <Message Text="Copying wwwroot to your project.." />  
+         <ItemGroup>
+            <SourceScripts Include="$(MSBuildThisFileDirectory)..\wwwroot\**\*.*"/>
+         </ItemGroup>
+         <Copy 
+            SourceFiles="@(SourceScripts)"
+            DestinationFiles="@(SourceScripts -> '$(MSBuildProjectDirectory)\wwwroot\%(RecursiveDir)%(Filename)%(Extension)')"
+            Condition="!Exists('$(MSBuildProjectDirectory)\wwwroot\%(RecursiveDir)%(Filename)%(Extension)')"
+         />
+   </Target>--> 
+
+<ItemGroup>
+	<MySourceFiles Include="\**\*.exe"/>
+</ItemGroup>
+
+<Target Name="CopyFiles" BeforeTargets="Build">
+	<Copy
+		SourceFiles="@(MySourceFiles)"
+		DestinationFolder="$(MSBuildProjectDirectory)\..\..\..\wwwroot\Rotativa"
+        />
+</Target>
+</Project>
