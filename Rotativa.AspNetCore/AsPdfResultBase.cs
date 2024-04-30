@@ -55,7 +55,7 @@ namespace Rotativa.AspNetCore
         /// <summary>
         /// Path to wkhtmltopdf binary.
         /// </summary>
-        [Obsolete("Use WkhtmlPath instead of CookieName.", false)]
+        [Obsolete("Use WkhtmlPath instead of WkhtmltopdfPath.", false)]
         public string WkhtmltopdfPath
         {
             get
