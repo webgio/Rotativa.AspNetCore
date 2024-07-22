@@ -1,4 +1,4 @@
-﻿using iTextSharp.text.pdf;
+﻿using iText.Kernel.Pdf;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -43,19 +43,20 @@ namespace Rotativa.AspNetCore.Tests
             {
                 // Create a reader for the given PDF file
                 var reader = new PdfReader(inFileName);
+                var document = new PdfDocument(reader);
                 //outFile = File.CreateText(outFileName);
                 outFile = new StreamWriter(outFileName, false, System.Text.Encoding.UTF8);
 
                 Console.Write("Processing: ");
 
                 int totalLen = 68;
-                float charUnit = ((float)totalLen) / (float)reader.NumberOfPages;
+                float charUnit = ((float)totalLen) / (float)document.GetNumberOfPages();
                 int totalWritten = 0;
                 float curUnit = 0;
 
-                for (int page = 1; page <= reader.NumberOfPages; page++)
+                for (int page = 1; page <= document.GetNumberOfPages(); page++)
                 {
-                    outFile.Write(ExtractTextFromPDFBytes(reader.GetPageContent(page)) + " ");
+                    outFile.Write(ExtractTextFromPDFBytes(document.GetPage(page).GetContentBytes()) + " ");
 
                     // Write the progress.
                     if (charUnit >= 1.0f)

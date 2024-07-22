@@ -36,7 +36,8 @@ namespace Rotativa.AspNetCore.Tests
         [Theory(DisplayName = "should return the demo home page")]
         //[InlineData("http://localhost:64310", "Asp.net core 2.0")]
         //[InlineData("https://localhost:44375", "Asp.net core 3.1")]
-        [InlineData("https://localhost:7059", "Asp.net 6")]
+        //[InlineData("https://localhost:7059", "Asp.net 6")]
+        [InlineData("https://localhost:56246", "Asp.net 8")]
         public void Is_the_site_reachable(string url, string site)
         {
             selenium.Navigate().GoToUrl(url);
@@ -46,7 +47,8 @@ namespace Rotativa.AspNetCore.Tests
         [Theory(DisplayName = "can get the PDF from the contact link")]
         //[InlineData("http://localhost:64310", "Asp.net core 2.0")]
         //[InlineData("https://localhost:44375", "Asp.net core 3.1")]
-        [InlineData("https://localhost:7059", "Asp.net 6")]
+        //[InlineData("https://localhost:7059", "Asp.net 6")]
+        [InlineData("https://localhost:56246", "Asp.net 8")]
         public void Contact_PDF(string url, string site)
         {
             selenium.Navigate().GoToUrl(url);
