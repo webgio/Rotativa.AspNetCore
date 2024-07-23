@@ -1,7 +1,4 @@
-﻿//using iTextSharp.text.exceptions;
-//using iTextSharp.text.pdf;
-//using iTextSharp.text.pdf.parser;
-using iText.Kernel.Exceptions;
+﻿using iText.Kernel.Exceptions;
 using iText.Kernel.Pdf;
 using iText.Kernel.Pdf.Canvas.Parser;
 using iText.Kernel.Pdf.Canvas.Parser.Listener;
