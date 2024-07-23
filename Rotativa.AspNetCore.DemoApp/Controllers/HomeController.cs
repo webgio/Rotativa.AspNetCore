@@ -39,7 +39,7 @@ namespace Rotativa.AspNetCore.DemoApp.Controllers
             // IsPartialView is false by default. We add some additional ViewData.
             // Using custom options 'Format' and 'Quality' as a demo.
             // See AsImageResultBase for more options.
-            return new ViewAsImage("ContactDemo", isPartialView: false, viewData: ViewData)
+            return new ViewAsImage("ContactDemo", isPartialView: false, viewData: ViewData, setBaseUrl: true)
             {
                 Format = ImageFormat.png,
                 Quality = 90

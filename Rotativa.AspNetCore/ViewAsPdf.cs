@@ -31,7 +31,7 @@ namespace Rotativa.AspNetCore
 {
     public class ViewAsPdf : AsPdfResultBase
     {
-        public ViewAsPdf(ViewDataDictionary viewData = null, bool isPartialView = false)
+        public ViewAsPdf(ViewDataDictionary viewData = null, bool isPartialView = false, bool setBaseUrl = true)
         {
             this.WkhtmlPath = string.Empty;
             this.ViewData = viewData ?? new ViewDataDictionary(
@@ -39,22 +39,23 @@ namespace Rotativa.AspNetCore
                 modelState: new ModelStateDictionary());
             this.ViewName = string.Empty;
             this.IsPartialView = isPartialView;
+            this.SetBaseUrl = setBaseUrl;
         }
 
-        public ViewAsPdf(string viewName, ViewDataDictionary viewData = null, bool isPartialView = false)
-            : this(viewData, isPartialView)
+        public ViewAsPdf(string viewName, ViewDataDictionary viewData = null, bool isPartialView = false, bool setBaseUrl = true)
+            : this(viewData, isPartialView, setBaseUrl)
         {
             this.ViewName = viewName;
         }
 
-        public ViewAsPdf(object model, ViewDataDictionary viewData = null, bool isPartialView = false)
-            : this(viewData, isPartialView)
+        public ViewAsPdf(object model, ViewDataDictionary viewData = null, bool isPartialView = false, bool setBaseUrl = true)
+            : this(viewData, isPartialView, setBaseUrl)
         {
             this.ViewData.Model = model;
         }
 
-        public ViewAsPdf(string viewName, object model, ViewDataDictionary viewData = null, bool isPartialView = false)
-            : this(viewData, isPartialView)
+        public ViewAsPdf(string viewName, object model, ViewDataDictionary viewData = null, bool isPartialView = false, bool setBaseUrl = true)
+            : this(viewData, isPartialView, setBaseUrl)
         {
             this.ViewName = viewName;
             this.ViewData.Model = model;

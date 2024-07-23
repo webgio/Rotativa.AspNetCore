@@ -33,12 +33,22 @@ namespace Rotativa.AspNetCore
             this.WkhtmlPath = string.Empty;
             this.FormsAuthenticationCookieName = ".ASPXAUTH";
             this.IsPartialView = false;
+            this.SetBaseUrl = true;
         }
 
         /// <summary>
         /// Determines if the view that is referenced is partial or not.
         /// </summary>
         public bool IsPartialView { get; set; }
+
+        /// <summary>
+        /// Whether we add a base URL when we generate the HTML.
+        /// </summary>
+        /// <remarks>
+        /// This was always on because it wasn't configurable (<= 1.3.2). That's why the default is on.
+        /// However it's cleaner to allow developers to set it themselves, and only add the BaseUrl when requested.
+        /// </remarks>
+        public bool SetBaseUrl { get; set; }
 
         /// <summary>
         /// This will be send to the browser as a name of the generated PDF file.
@@ -310,6 +320,11 @@ namespace Rotativa.AspNetCore
                 await view.RenderAsync(viewContext);
 
                 html = output.GetStringBuilder();
+            }
+
+            if (!this.SetBaseUrl)
+            {
+                return html.ToString();
             }
 
             string baseUrl = string.Format("{0}://{1}", context.HttpContext.Request.Scheme, context.HttpContext.Request.Host);

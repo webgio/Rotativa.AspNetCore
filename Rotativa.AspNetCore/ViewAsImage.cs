@@ -33,7 +33,7 @@ namespace Rotativa.AspNetCore
 {
     public class ViewAsImage : AsImageResultBase
     {
-        public ViewAsImage(ViewDataDictionary viewData = null, bool isPartialView = false)
+        public ViewAsImage(ViewDataDictionary viewData = null, bool isPartialView = false, bool setBaseUrl = true)
         {
             this.WkhtmlPath = string.Empty;
             this.ViewData = viewData ?? new ViewDataDictionary(
@@ -41,22 +41,23 @@ namespace Rotativa.AspNetCore
                 modelState: new ModelStateDictionary());
             this.ViewName = string.Empty;
             this.IsPartialView = isPartialView;
+            this.SetBaseUrl = setBaseUrl;
         }
 
-        public ViewAsImage(string viewName, ViewDataDictionary viewData = null, bool isPartialView = false)
-            : this(viewData, isPartialView)
+        public ViewAsImage(string viewName, ViewDataDictionary viewData = null, bool isPartialView = false, bool setBaseUrl = true)
+            : this(viewData, isPartialView, setBaseUrl)
         {
             this.ViewName = viewName;
         }
 
-        public ViewAsImage(object model, ViewDataDictionary viewData = null, bool isPartialView = false)
-            : this(viewData, isPartialView)
+        public ViewAsImage(object model, ViewDataDictionary viewData = null, bool isPartialView = false, bool setBaseUrl = true)
+            : this(viewData, isPartialView, setBaseUrl)
         {
             this.ViewData.Model = model;
         }
 
-        public ViewAsImage(string viewName, object model, ViewDataDictionary viewData = null, bool isPartialView = false)
-            : this(viewData, isPartialView)
+        public ViewAsImage(string viewName, object model, ViewDataDictionary viewData = null, bool isPartialView = false, bool setBaseUrl = true)
+            : this(viewData, isPartialView, setBaseUrl)
         {
             this.ViewName = viewName;
             this.ViewData.Model = model;
