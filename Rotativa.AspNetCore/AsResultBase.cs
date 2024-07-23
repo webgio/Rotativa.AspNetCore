@@ -7,6 +7,12 @@ using System.Text;
 using System.Text.RegularExpressions;
 using Rotativa.AspNetCore.Options;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewEngines;
+
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
+
 #if NET5_0_OR_GREATER
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Http;
@@ -20,13 +26,19 @@ using System.Threading.Tasks;
 
 namespace Rotativa.AspNetCore
 {
-    public abstract class AsResultBase : ViewResult //IActionResult
+    public abstract class AsResultBase : ViewResult
     {
         protected AsResultBase()
         {
             this.WkhtmlPath = string.Empty;
             this.FormsAuthenticationCookieName = ".ASPXAUTH";
+            this.IsPartialView = false;
         }
+
+        /// <summary>
+        /// Determines if the view that is referenced is partial or not.
+        /// </summary>
+        public bool IsPartialView { get; set; }
 
         /// <summary>
         /// This will be send to the browser as a name of the generated PDF file.
@@ -34,7 +46,7 @@ namespace Rotativa.AspNetCore
         public string FileName { get; set; }
 
         /// <summary>
-        /// Path to wkhtmltopdf\wkhtmltoimage binary.
+        /// Path to wkhtmltopdf / wkhtmltoimage binary.
         /// </summary>
         public string WkhtmlPath { get; set; }
 
@@ -115,9 +127,9 @@ namespace Rotativa.AspNetCore
         protected abstract string GetUrl(Microsoft.AspNetCore.Mvc.ActionContext context);
 
         /// <summary>
-        /// Returns properties with OptionFlag attribute as one line that can be passed to wkhtmltopdf binary.
+        /// Returns properties with OptionFlag attribute as one line that can be passed to wkhtmltopdf / wkhtmltoimage binary.
         /// </summary>
-        /// <returns>Command line parameter that can be directly passed to wkhtmltopdf binary.</returns>
+        /// <returns>Command line parameter that can be directly passed to wkhtmltopdf / wkhtmltoimage binary.</returns>
         protected virtual string GetConvertOptions()
         {
             var result = new StringBuilder();
@@ -244,5 +256,64 @@ namespace Rotativa.AspNetCore
         }
 
         protected abstract string GetContentType();
+
+        /// <summary>
+        /// Get the view out of the context.
+        /// </summary>
+        /// <param name="context">The action context</param>
+        /// <returns></returns>
+        /// <exception cref="InvalidOperationException"></exception>
+        protected IView GetView(ActionContext context)
+        {
+            // Use current action name if the view name was not provided
+            if (string.IsNullOrEmpty(ViewName))
+            {
+                ViewName = ((Microsoft.AspNetCore.Mvc.Controllers.ControllerActionDescriptor)context.ActionDescriptor).ActionName;
+            }
+
+            var engine = context.HttpContext.RequestServices.GetService(typeof(ICompositeViewEngine)) as ICompositeViewEngine;
+            var getViewResult = engine.GetView(executingFilePath: null, viewPath: ViewName, isMainPage: !IsPartialView);
+            if (getViewResult.Success)
+            {
+                return getViewResult.View;
+            }
+
+            var findViewResult = engine.FindView(context, ViewName, isMainPage: !IsPartialView);
+            if (findViewResult.Success)
+            {
+                return findViewResult.View;
+            }
+
+            var searchedLocations = getViewResult.SearchedLocations.Concat(findViewResult.SearchedLocations);
+            var errorMessage = string.Join(
+                System.Environment.NewLine,
+                new[] { $"Unable to find view '{ViewName}'. The following locations were searched:" }.Concat(searchedLocations));
+
+            throw new InvalidOperationException(errorMessage);
+        }
+
+        protected async Task<string> GetHtmlFromView(ActionContext context)
+        {
+            var view = GetView(context);
+            var html = new StringBuilder();
+
+            using (var output = new StringWriter())
+            {
+                var viewContext = new ViewContext(
+                    context,
+                    view,
+                    this.ViewData,
+                    this.TempData,
+                    output,
+                    new HtmlHelperOptions());
+
+                await view.RenderAsync(viewContext);
+
+                html = output.GetStringBuilder();
+            }
+
+            string baseUrl = string.Format("{0}://{1}", context.HttpContext.Request.Scheme, context.HttpContext.Request.Host);
+            return Regex.Replace(html.ToString(), "<head>", string.Format("<head><base href=\"{0}\" />", baseUrl), RegexOptions.IgnoreCase);
+        }
     }
 }

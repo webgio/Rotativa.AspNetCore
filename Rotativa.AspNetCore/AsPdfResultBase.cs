@@ -11,6 +11,7 @@ namespace Rotativa.AspNetCore
         {
             this.PageMargins = new Margins();
         }
+
         /// <summary>
         /// Sets the page size.
         /// </summary>

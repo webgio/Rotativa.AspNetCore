@@ -15,7 +15,7 @@ https://www.nuget.org/packages/Rotativa.AspNetCore
 Please give feedback!
 
 ## Needs configuration
-Basic configuration done in Program.cs (.net 6 or 7):
+Basic configuration done in Program.cs (.net 6, 7 or 8):
 
 ```csharp
 app.UseRotativa();
@@ -27,6 +27,8 @@ app.UseRotativa(env);
 ```
 
 Make sure you have a folder with the wkhtmltopdf.exe file accessible by the process running the web app. By default it searches in a folder named "Rotativa" in the root of the web app. If you need to change that use the optional parameter to the Setup call `RotativaConfiguration.Setup(env, "path/relative/to/root")`
+
+Place wkhtmltoimage.exe alongside wkhtmltopdf.exe in case you need to create images.
 
 ## Issues and Pull Request
 Contribution is welcomed. If you would like to provide a PR please add some testing.
