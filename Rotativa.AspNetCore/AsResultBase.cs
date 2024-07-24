@@ -34,6 +34,8 @@ namespace Rotativa.AspNetCore
             this.FormsAuthenticationCookieName = ".ASPXAUTH";
             this.IsPartialView = false;
             this.SetBaseUrl = true;
+            this.DontStopSlowScripts = false;
+            this.NoImages = false;
         }
 
         /// <summary>
@@ -100,10 +102,34 @@ namespace Rotativa.AspNetCore
         public bool IsJavaScriptDisabled { get; set; }
 
         /// <summary>
+        /// Indicates whether the page can run JavaScript.
+        /// </summary>
+        [OptionFlag("--no-stop-slow-scripts")]
+        public bool DontStopSlowScripts { get; set; }
+
+        /// <summary>
+        /// Specify a user style sheet, to load with every page.
+        /// </summary>
+        [OptionFlag("--user-style-sheet")]
+        public string UserStyleSheet { get; set; }
+
+        /// <summary>
         /// Minimum font size.
         /// </summary>
         [OptionFlag("--minimum-font-size")]
         public int? MinimumFontSize { get; set; }
+
+        /// <summary>
+        /// Sets the zoom level.
+        /// </summary>
+        [OptionFlag("--zoom")]
+        public double? Zoom { get; set; }
+
+        /// <summary>
+        /// Do not load or print images.
+        /// </summary>
+        [OptionFlag("--no-images")]
+        public bool NoImages { get; set; }
 
         /// <summary>
         /// Sets proxy server.
@@ -124,6 +150,18 @@ namespace Rotativa.AspNetCore
         public string Password { get; set; }
 
         /// <summary>
+        /// Password to ssl client cert private key.
+        /// </summary>
+        [OptionFlag("--ssl-key-password")]
+        public string SslKeyPassword { get; set; }
+
+        /// <summary>
+        /// Path to the ssl client cert public key in OpenSSL PEM format, optionally followed by intermediate ca and trusted certs
+        /// </summary>
+        [OptionFlag("--ssl-crt-path")]
+        public string SslCrtPath { get; set; }
+
+        /// <summary>
         /// Use this if you need another switches that are not currently supported by Rotativa.
         /// </summary>
         [OptionFlag("")]
@@ -140,7 +178,7 @@ namespace Rotativa.AspNetCore
         /// Returns properties with OptionFlag attribute as one line that can be passed to wkhtmltopdf / wkhtmltoimage binary.
         /// </summary>
         /// <returns>Command line parameter that can be directly passed to wkhtmltopdf / wkhtmltoimage binary.</returns>
-        protected virtual string GetConvertOptions()
+        public virtual string GetConvertOptions()
         {
             var result = new StringBuilder();
 

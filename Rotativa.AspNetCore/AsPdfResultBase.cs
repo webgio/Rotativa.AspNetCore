@@ -39,12 +39,6 @@ namespace Rotativa.AspNetCore
         public Orientation? PageOrientation { get; set; }
 
         /// <summary>
-        /// Sets the page zoom.
-        /// </summary>
-        [OptionFlag("--zoom")]
-        public double? Zoom { get; set; }
-
-        /// <summary>
         /// Sets the page margins.
         /// </summary>
         public Margins PageMargins { get; set; }
@@ -93,7 +87,7 @@ namespace Rotativa.AspNetCore
         [OptionFlag("-g")]
         public bool IsGrayScale { get; set; }
 
-        protected override string GetConvertOptions()
+        public override string GetConvertOptions()
         {
             var result = new StringBuilder();
 

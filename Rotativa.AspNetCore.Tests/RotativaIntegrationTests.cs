@@ -15,12 +15,12 @@ namespace Rotativa.AspNetCore.Tests
 {
 
     [Trait("Rotativa.AspNetCore", "accessing the demo site home page")]
-    public class RotativaTests    
+    public class RotativaIntegrationTests    
     {
         ChromeDriver selenium;
         StringBuilder verificationErrors;
 
-        public  RotativaTests()
+        public  RotativaIntegrationTests()
         {
             selenium = new ChromeDriver();
             //selenium = new InternetExplorerDriver();
