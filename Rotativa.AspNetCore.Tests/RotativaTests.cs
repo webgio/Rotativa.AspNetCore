@@ -65,20 +65,49 @@ namespace Rotativa.AspNetCore.Tests
             }
         }
 
-        //[Fact]
-        //public void Can_print_the_test_image()
-        //{
+        [Theory(DisplayName = "can get the png from the contact image link")]
+        //[InlineData("http://localhost:64310", "Asp.net core 2.0")]
+        //[InlineData("https://localhost:44375", "Asp.net core 3.1")]
+        //[InlineData("https://localhost:7059", "Asp.net 6")]
+        [InlineData("https://localhost:56246", "Asp.net 8")]
+        public async Task Can_create_png_image(string url, string site)
+        {
+            selenium.Navigate().GoToUrl(url);
 
-        //    var testLink = selenium.FindElement(By.LinkText("Test Image"));
-        //    var pdfHref = testLink.GetAttribute("href");
-        //    using (var wc = new WebClient())
-        //    {
-        //        var imageResult = wc.DownloadData(new Uri(pdfHref));
-        //        var image = Image.FromStream(new MemoryStream(imageResult));
-        //        image.Should().Not.Be.Null();
-        //        image.RawFormat.Should().Be.EqualTo(ImageFormat.Jpeg);
-        //    }
-        //}
+            var testLink = selenium.FindElement(By.LinkText("Contact Image"));
+            var pdfHref = testLink.GetAttribute("href");
+
+            using (var wc = new HttpClient())
+            {
+                var imageResult = await wc.GetAsync(new Uri(pdfHref));
+                var image = Image.FromStream(imageResult.Content.ReadAsStream());
+
+                Assert.NotNull(image);
+                Assert.Equal(image.RawFormat, System.Drawing.Imaging.ImageFormat.Png);
+            }
+        }
+
+        [Theory(DisplayName = "can get the jpg from the privacy image link")]
+        //[InlineData("http://localhost:64310", "Asp.net core 2.0")]
+        //[InlineData("https://localhost:44375", "Asp.net core 3.1")]
+        //[InlineData("https://localhost:7059", "Asp.net 6")]
+        [InlineData("https://localhost:56246", "Asp.net 8")]
+        public async Task Can_create_jpg_image(string url, string site)
+        {
+            selenium.Navigate().GoToUrl(url);
+
+            var testLink = selenium.FindElement(By.LinkText("Privacy Image"));
+            var pdfHref = testLink.GetAttribute("href");
+
+            using (var wc = new HttpClient())
+            {
+                var imageResult = await wc.GetAsync(new Uri(pdfHref));
+                var image = Image.FromStream(imageResult.Content.ReadAsStream());
+
+                Assert.NotNull(image);
+                Assert.Equal(image.RawFormat, System.Drawing.Imaging.ImageFormat.Jpeg);
+            }
+        }
 
         //[Fact]
         //public void Can_print_the_test_image_png()

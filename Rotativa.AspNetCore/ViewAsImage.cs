@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using Rotativa.AspNetCore.Extensions;
 
 
 #if NET6_0_OR_GREATER

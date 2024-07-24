@@ -307,13 +307,16 @@ namespace Rotativa.AspNetCore
             var view = GetView(context);
             var html = new StringBuilder();
 
+            ITempDataProvider tempDataProvider = context.HttpContext.RequestServices.GetService(typeof(ITempDataProvider)) as ITempDataProvider;
+            var tempDataDictionary = new TempDataDictionary(context.HttpContext, tempDataProvider);
+
             using (var output = new StringWriter())
             {
                 var viewContext = new ViewContext(
                     context,
                     view,
                     this.ViewData,
-                    this.TempData,
+                    tempDataDictionary,
                     output,
                     new HtmlHelperOptions());
 
