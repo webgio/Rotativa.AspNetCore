@@ -123,6 +123,29 @@ return new ViewAsPdf()
 };
 ```
 
+If you need to write the PDF to the server, you can call `BuildFile` and use the resulting byte array to save the file:
+
+```csharp
+var pdfFile = new ViewAsPdf().BuildFile(this.ControllerContext);
+File.WriteAllBytes("wwwroot/output.pdf", pdfFile);
+```
+
+This is how you save the PDF file to the server before displaying it in the browser:
+
+```csharp
+public IActionResult Invoice()
+{
+    // Generate the PDF.
+    var pdfFile = new ViewAsPdf();
+    
+    // Save to the server.
+    File.WriteAllBytes("wwwroot/output.pdf", pdfFile.BuildFile(this.ControllerContext));
+
+    // Show in the browser.
+    return pdfFile;
+}
+```
+
 ## Issues and Pull Request
 Contribution is welcomed. If you would like to provide a PR please add some testing.
 
