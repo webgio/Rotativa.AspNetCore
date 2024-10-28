@@ -1,6 +1,7 @@
-﻿using iTextSharp.text.exceptions;
-using iTextSharp.text.pdf;
-using iTextSharp.text.pdf.parser;
+﻿using iText.Kernel.Exceptions;
+using iText.Kernel.Pdf;
+using iText.Kernel.Pdf.Canvas.Parser;
+using iText.Kernel.Pdf.Canvas.Parser.Listener;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,12 +23,12 @@ namespace Rotativa.AspNetCore.Tests
         {
             try
             {
-                this.pdfReader = new PdfReader(pdfcontent);
+                this.pdfReader = new PdfReader(new MemoryStream(pdfcontent));
                 var parser = new PDFParser();
                 var parsed = parser.ExtractTextFromPDFBytes(pdfcontent);
                 this.PdfIsValid = true;
             }
-            catch (InvalidPdfException ex)
+            catch (PdfException ex)
             {
                 this.PdfException = ex;
                 this.PdfIsValid = false;
@@ -36,10 +37,12 @@ namespace Rotativa.AspNetCore.Tests
 
         public bool PdfContains(string text)
         {
-            for (int page = 1; page <= pdfReader.NumberOfPages; page++)
+            var pdfDocument = new PdfDocument(this.pdfReader);
+
+            for (int page = 1; page <= pdfDocument.GetNumberOfPages(); page++)
             {
                 var strategy = new SimpleTextExtractionStrategy();
-                string currentText = PdfTextExtractor.GetTextFromPage(pdfReader, page, strategy);
+                string currentText = PdfTextExtractor.GetTextFromPage(pdfDocument.GetPage(page), strategy);
 
                 currentText = Encoding.UTF8.GetString(ASCIIEncoding.Convert(Encoding.Default, Encoding.UTF8, Encoding.Default.GetBytes(currentText)));
                 if (currentText.Contains(text))

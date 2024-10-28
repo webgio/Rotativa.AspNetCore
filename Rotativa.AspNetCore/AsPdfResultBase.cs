@@ -11,6 +11,7 @@ namespace Rotativa.AspNetCore
         {
             this.PageMargins = new Margins();
         }
+
         /// <summary>
         /// Sets the page size.
         /// </summary>
@@ -55,7 +56,7 @@ namespace Rotativa.AspNetCore
         /// <summary>
         /// Path to wkhtmltopdf binary.
         /// </summary>
-        [Obsolete("Use WkhtmlPath instead of CookieName.", false)]
+        [Obsolete("Use WkhtmlPath instead of WkhtmltopdfPath.", false)]
         public string WkhtmltopdfPath
         {
             get
@@ -86,7 +87,7 @@ namespace Rotativa.AspNetCore
         [OptionFlag("-g")]
         public bool IsGrayScale { get; set; }
 
-        protected override string GetConvertOptions()
+        public override string GetConvertOptions()
         {
             var result = new StringBuilder();
 

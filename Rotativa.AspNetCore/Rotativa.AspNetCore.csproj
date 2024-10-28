@@ -1,18 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>netstandard2.0;netcoreapp3.1;net6;net5.0;net7</TargetFrameworks>
+		<TargetFrameworks>netstandard2.0;netcoreapp3.1;net6;net5.0;net7;net8</TargetFrameworks>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-		<Version>1.3.2</Version>
+		<Version>1.4.0</Version>
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 		<RepositoryUrl>https://github.com/webgio/Rotativa.AspNetCore</RepositoryUrl>
 		<PackageProjectUrl>https://github.com/webgio/Rotativa.AspNetCore</PackageProjectUrl>
 		<Company>Viva Software di Bozio Giorgio</Company>
 		<Authors>Giorgio Bozio</Authors>
-		<Description>Rotativa: PDF easy creation for Asp.Net 6 and Asp.Net Core</Description>
-		<PackageReleaseNotes>Multi target enabling .net core 3.1, .net 5, .net 6, .net 7</PackageReleaseNotes>
+		<Description>Rotativa: PDF easy creation for Asp.Net Core, Asp.Net 6 and Asp.Net 8</Description>
+		<PackageReleaseNotes>Multi target enabling .net core 3.1, .net 5, .net 6, .net 7, .net 8</PackageReleaseNotes>
 		<PackageTags>PDF AspNetCore</PackageTags>
-		<Copyright>2023 Viva Software di Bozio Giorgio</Copyright>
+		<Copyright>2024 Viva Software di Bozio Giorgio</Copyright>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 	</PropertyGroup>
@@ -30,6 +30,10 @@
 	<!--<ItemGroup Condition=" '$(TargetFramework)' == 'net6.0' ">
 		<PackageReference Include="Microsoft.AspNetCore.App.Ref" Version="6.0.16" />
 	</ItemGroup>-->
+  
+	<ItemGroup Condition=" '$(TargetFramework)' == 'net8' ">
+		<FrameworkReference Include="Microsoft.AspNetCore.App" />
+	</ItemGroup>
 
 	<ItemGroup Condition=" '$(TargetFramework)' == 'net7' ">
 		<FrameworkReference Include="Microsoft.AspNetCore.App" />
@@ -49,7 +53,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Include="README.md" Pack="true" PackagePath="\"/>
+		<None Include="README.md" Pack="true" PackagePath="\" />
 	</ItemGroup>
 
 	<!--<ItemGroup>

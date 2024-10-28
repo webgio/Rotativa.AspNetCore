@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Rotativa.AspNetCore.DemoApp.Models;
 using System.Diagnostics;
+using Rotativa.AspNetCore.Options;
 
 namespace Rotativa.AspNetCore.DemoApp.Controllers
 {
@@ -27,6 +28,27 @@ namespace Rotativa.AspNetCore.DemoApp.Controllers
         public IActionResult Privacy()
         {
             return new ViewAsPdf();
+        }
+
+        public IActionResult ContactImage()
+        {
+            ViewData["Message"] = "Your contact page image.";
+
+            // Example on how to set custom data.
+            // For demo purposes we changed the name of the view, and specified that it isn't a partial view.
+            // IsPartialView is false by default. We add some additional ViewData.
+            // Using custom options 'Format' and 'Quality' as a demo.
+            // See AsImageResultBase for more options.
+            return new ViewAsImage("ContactDemo", isPartialView: false, viewData: ViewData, setBaseUrl: true)
+            {
+                Format = ImageFormat.png,
+                Quality = 90
+            };
+        }
+
+        public IActionResult PrivacyImage()
+        {
+            return new ViewAsImage();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

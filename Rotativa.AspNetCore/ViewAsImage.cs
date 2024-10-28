@@ -6,7 +6,6 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 
-
 #if NET6_0_OR_GREATER
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
     using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -20,18 +19,20 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Rendering;
 #elif NETSTANDARD2_0
-    using Microsoft.AspNetCore.Mvc.ViewFeatures;
-    using Microsoft.AspNetCore.Mvc.ModelBinding;
-    using Microsoft.AspNetCore.Mvc.ViewEngines;
-    using Microsoft.AspNetCore.Mvc;
-    using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc.ViewEngines;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Collections.Generic;
 #endif
+
 
 namespace Rotativa.AspNetCore
 {
-    public class ViewAsPdf : AsPdfResultBase
+    public class ViewAsImage : AsImageResultBase
     {
-        public ViewAsPdf(ViewDataDictionary viewData = null, bool isPartialView = false, bool setBaseUrl = true)
+        public ViewAsImage(ViewDataDictionary viewData = null, bool isPartialView = false, bool setBaseUrl = true)
         {
             this.WkhtmlPath = string.Empty;
             this.ViewData = viewData ?? new ViewDataDictionary(
@@ -42,19 +43,19 @@ namespace Rotativa.AspNetCore
             this.SetBaseUrl = setBaseUrl;
         }
 
-        public ViewAsPdf(string viewName, ViewDataDictionary viewData = null, bool isPartialView = false, bool setBaseUrl = true)
+        public ViewAsImage(string viewName, ViewDataDictionary viewData = null, bool isPartialView = false, bool setBaseUrl = true)
             : this(viewData, isPartialView, setBaseUrl)
         {
             this.ViewName = viewName;
         }
 
-        public ViewAsPdf(object model, ViewDataDictionary viewData = null, bool isPartialView = false, bool setBaseUrl = true)
+        public ViewAsImage(object model, ViewDataDictionary viewData = null, bool isPartialView = false, bool setBaseUrl = true)
             : this(viewData, isPartialView, setBaseUrl)
         {
             this.ViewData.Model = model;
         }
 
-        public ViewAsPdf(string viewName, object model, ViewDataDictionary viewData = null, bool isPartialView = false, bool setBaseUrl = true)
+        public ViewAsImage(string viewName, object model, ViewDataDictionary viewData = null, bool isPartialView = false, bool setBaseUrl = true)
             : this(viewData, isPartialView, setBaseUrl)
         {
             this.ViewName = viewName;
@@ -68,7 +69,7 @@ namespace Rotativa.AspNetCore
 
         protected override async Task<byte[]> CallTheDriver(ActionContext context)
         {
-            return WkhtmltopdfDriver.ConvertHtml(this.WkhtmlPath, this.GetConvertOptions(), await GetHtmlFromView(context));
+            return WkhtmltoimageDriver.ConvertHtml(this.WkhtmlPath, this.GetConvertOptions(), await GetHtmlFromView(context));
         }
     }
 }

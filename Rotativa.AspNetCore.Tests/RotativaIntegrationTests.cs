@@ -15,12 +15,12 @@ namespace Rotativa.AspNetCore.Tests
 {
 
     [Trait("Rotativa.AspNetCore", "accessing the demo site home page")]
-    public class RotativaTests    
+    public class RotativaIntegrationTests    
     {
         ChromeDriver selenium;
         StringBuilder verificationErrors;
 
-        public  RotativaTests()
+        public  RotativaIntegrationTests()
         {
             selenium = new ChromeDriver();
             //selenium = new InternetExplorerDriver();
@@ -36,62 +36,104 @@ namespace Rotativa.AspNetCore.Tests
         [Theory(DisplayName = "should return the demo home page")]
         //[InlineData("http://localhost:64310", "Asp.net core 2.0")]
         //[InlineData("https://localhost:44375", "Asp.net core 3.1")]
-        [InlineData("https://localhost:7059", "Asp.net 6")]
+        //[InlineData("https://localhost:7059", "Asp.net 6")]
+        [InlineData("https://localhost:56246", "Asp.net 8")]
         public void Is_the_site_reachable(string url, string site)
         {
             selenium.Navigate().GoToUrl(url);
+
             Assert.Equal("Home Page - Rotativa.AspNetCore.Demo", selenium.Title);
         }
 
         [Theory(DisplayName = "can get the PDF from the contact link")]
         //[InlineData("http://localhost:64310", "Asp.net core 2.0")]
         //[InlineData("https://localhost:44375", "Asp.net core 3.1")]
-        [InlineData("https://localhost:7059", "Asp.net 6")]
-        public void Contact_PDF(string url, string site)
+        //[InlineData("https://localhost:7059", "Asp.net 6")]
+        [InlineData("https://localhost:56246", "Asp.net 8")]
+        public async Task Contact_PDF_ViewData(string url, string site)
+        {
+            selenium.Navigate().GoToUrl(url);
+
+            var testLink = selenium.FindElement(By.LinkText("Contact"));
+            var pdfHref = testLink.GetAttribute("href");
+
+            using (var wc = new HttpClient())
+            {
+                var pdfResult = await wc.GetAsync(new Uri(pdfHref));
+                var pdfTester = new PdfTester();
+                pdfTester.LoadPdf(await pdfResult.Content.ReadAsByteArrayAsync());
+                Assert.True(pdfTester.PdfIsValid);
+
+                // This should be present, as it's set in the viewdata.
+                Assert.True(pdfTester.PdfContains("Your contact page."));
+            }
+        }
+
+        [Theory(DisplayName = "can get a PDF with special characters")]
+        //[InlineData("http://localhost:64310", "Asp.net core 2.0")]
+        //[InlineData("https://localhost:44375", "Asp.net core 3.1")]
+        //[InlineData("https://localhost:7059", "Asp.net 6")]
+        [InlineData("https://localhost:56246", "Asp.net 8")]
+        public async Task Contact_PDF_SpecialCharacters(string url, string site)
         {
             selenium.Navigate().GoToUrl(url);
             var testLink = selenium.FindElement(By.LinkText("Contact"));
             var pdfHref = testLink.GetAttribute("href");
-            using (var wc = new WebClient())
+
+            using (var wc = new HttpClient())
             {
-                var pdfResult = wc.DownloadData(new Uri(pdfHref));
+                var pdfResult = await wc.GetAsync(new Uri(pdfHref));
                 var pdfTester = new PdfTester();
-                pdfTester.LoadPdf(pdfResult);
+                pdfTester.LoadPdf(await pdfResult.Content.ReadAsByteArrayAsync());
+
                 Assert.True(pdfTester.PdfIsValid);
-                Assert.True(pdfTester.PdfContains("Your contact page."));
-                //        pdfTester.PdfContains("admin").Should().Be.True();
+                Assert.True(pdfTester.PdfContains("àéù"));
             }
         }
 
-        //[Fact]
-        //public void Can_print_the_test_image()
-        //{
+        [Theory(DisplayName = "can get the png from the contact image link")]
+        //[InlineData("http://localhost:64310", "Asp.net core 2.0")]
+        //[InlineData("https://localhost:44375", "Asp.net core 3.1")]
+        //[InlineData("https://localhost:7059", "Asp.net 6")]
+        [InlineData("https://localhost:56246", "Asp.net 8")]
+        public async Task Can_create_png_image(string url, string site)
+        {
+            selenium.Navigate().GoToUrl(url);
 
-        //    var testLink = selenium.FindElement(By.LinkText("Test Image"));
-        //    var pdfHref = testLink.GetAttribute("href");
-        //    using (var wc = new WebClient())
-        //    {
-        //        var imageResult = wc.DownloadData(new Uri(pdfHref));
-        //        var image = Image.FromStream(new MemoryStream(imageResult));
-        //        image.Should().Not.Be.Null();
-        //        image.RawFormat.Should().Be.EqualTo(ImageFormat.Jpeg);
-        //    }
-        //}
+            var testLink = selenium.FindElement(By.LinkText("Contact Image"));
+            var pdfHref = testLink.GetAttribute("href");
 
-        //[Fact]
-        //public void Can_print_the_test_image_png()
-        //{
+            using (var wc = new HttpClient())
+            {
+                var imageResult = await wc.GetAsync(new Uri(pdfHref));
+                var image = Image.FromStream(imageResult.Content.ReadAsStream());
 
-        //    var testLink = selenium.FindElement(By.LinkText("Test Image Png"));
-        //    var pdfHref = testLink.GetAttribute("href");
-        //    using (var wc = new WebClient())
-        //    {
-        //        var imageResult = wc.DownloadData(new Uri(pdfHref));
-        //        var image = Image.FromStream(new MemoryStream(imageResult));
-        //        image.Should().Not.Be.Null();
-        //        image.RawFormat.Should().Be.EqualTo(ImageFormat.Png);
-        //    }
-        //}
+                Assert.NotNull(image);
+                Assert.Equal(image.RawFormat, System.Drawing.Imaging.ImageFormat.Png);
+            }
+        }
+
+        [Theory(DisplayName = "can get the jpg from the privacy image link")]
+        //[InlineData("http://localhost:64310", "Asp.net core 2.0")]
+        //[InlineData("https://localhost:44375", "Asp.net core 3.1")]
+        //[InlineData("https://localhost:7059", "Asp.net 6")]
+        [InlineData("https://localhost:56246", "Asp.net 8")]
+        public async Task Can_create_jpg_image(string url, string site)
+        {
+            selenium.Navigate().GoToUrl(url);
+
+            var testLink = selenium.FindElement(By.LinkText("Privacy Image"));
+            var pdfHref = testLink.GetAttribute("href");
+
+            using (var wc = new HttpClient())
+            {
+                var imageResult = await wc.GetAsync(new Uri(pdfHref));
+                var image = Image.FromStream(imageResult.Content.ReadAsStream());
+
+                Assert.NotNull(image);
+                Assert.Equal(image.RawFormat, System.Drawing.Imaging.ImageFormat.Jpeg);
+            }
+        }
 
         //[Fact]
         //public void Can_print_the_authorized_pdf()
@@ -192,22 +234,6 @@ namespace Rotativa.AspNetCore.Tests
         //        var image = Image.FromStream(new MemoryStream(imageResult));
         //        image.Should().Not.Be.Null();
         //        image.RawFormat.Should().Be.EqualTo(ImageFormat.Jpeg);
-        //    }
-        //}
-
-        //[Fact]
-        //public void Can_print_the_pdf_from_a_view_with_non_ascii_chars()
-        //{
-
-        //    var testLink = selenium.FindElement(By.LinkText("Test View"));
-        //    var pdfHref = testLink.GetAttribute("href");
-        //    using (var wc = new WebClient())
-        //    {
-        //        var pdfResult = wc.DownloadData(new Uri(pdfHref));
-        //        var pdfTester = new PdfTester();
-        //        pdfTester.LoadPdf(pdfResult);
-        //        pdfTester.PdfIsValid.Should().Be.True();
-        //        pdfTester.PdfContains("àéù").Should().Be.True();
         //    }
         //}
 
