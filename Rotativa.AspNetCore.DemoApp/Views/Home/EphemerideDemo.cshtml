@@ -1,0 +1,26 @@
+﻿@model Rotativa.AspNetCore.DemoApp.Models.Ephemeride
+
+@{
+    ViewData["Title"] = "Ephemeride";
+    List<string> testViewBag = ViewBag.testViewBag as List<string>;
+}
+<h2>@ViewData["Title"]</h2>
+<h3>@ViewData["Message"] </h3>
+
+<div>
+    <h1>@Model.DateOfTheDay</h1>
+    <p>@Model.TheDayToday</p>
+</div>
+
+<div>
+    <h2>ViewBag Content : </h2>
+    <ul>
+        @if (testViewBag != null)
+        {
+            foreach (var item in testViewBag)
+            {
+                <li>@item</li>
+            }
+        }
+    </ul>
+</div>
