@@ -6,8 +6,18 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
-  <ItemGroup>
+  <ItemGroup Condition=" '$(UseRotativaPackage)' != 'true' ">
     <ProjectReference Include="..\Rotativa.AspNetCore\Rotativa.AspNetCore.csproj" />
   </ItemGroup>
+
+  <!-- Build against the packed .nupkg instead of the project, to test the package itself.
+       Restore with Rotativa.AspNetCore.Tests/package-test.nuget.config and pass RotativaPackageVersion. -->
+  <ItemGroup Condition=" '$(UseRotativaPackage)' == 'true' ">
+    <PackageReference Include="Rotativa.AspNetCore" Version="$(RotativaPackageVersion)" />
+  </ItemGroup>
+
+  <Target Name="CheckRotativaPackageVersion" BeforeTargets="CollectPackageReferences" Condition=" '$(UseRotativaPackage)' == 'true' AND '$(RotativaPackageVersion)' == '' ">
+    <Error Text="Set RotativaPackageVersion when UseRotativaPackage is true." />
+  </Target>
 
 </Project>

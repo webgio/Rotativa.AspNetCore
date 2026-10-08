@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- https://learn.microsoft.com/dotnet/fundamentals/package-validation/diagnostic-ids -->
+<Suppressions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Suppression>
+    <DiagnosticId>CP0001</DiagnosticId>
+    <Target>T:Rotativa.AspNetCore.RotativaAppBuilderExtensions</Target>
+    <Left>lib/net5.0/Rotativa.AspNetCore.dll</Left>
+    <Right>lib/net6.0/Rotativa.AspNetCore.dll</Right>
+  </Suppression>
+  <Suppression>
+    <DiagnosticId>CP0002</DiagnosticId>
+    <Target>M:Rotativa.AspNetCore.RotativaConfiguration.Setup(Microsoft.AspNetCore.Hosting.IHostingEnvironment,System.String)</Target>
+    <Left>lib/netstandard2.0/Rotativa.AspNetCore.dll</Left>
+    <Right>lib/netcoreapp3.1/Rotativa.AspNetCore.dll</Right>
+  </Suppression>
+</Suppressions>
