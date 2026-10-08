@@ -15,6 +15,10 @@
 		<Copyright>2026 Viva Software di Bozio Giorgio</Copyright>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<!-- Check the package's API across target frameworks and against the last published release.
+		     Intentional differences are listed in CompatibilitySuppressions.xml. -->
+		<EnablePackageValidation>true</EnablePackageValidation>
+		<PackageValidationBaselineVersion>1.4.0</PackageValidationBaselineVersion>
 	</PropertyGroup>
 
 	<!--<ItemGroup>

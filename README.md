@@ -164,6 +164,10 @@ docker build -f Rotativa.AspNetCore.Tests/Dockerfile -t rotativa-tests .
 docker run --rm rotativa-tests
 ```
 
+Add `--build-arg USE_ROTATIVA_PACKAGE=true` to the build to pack the library and run the demo app against the `.nupkg` instead of the project, which tests the NuGet package itself.
+
+Packing the library also runs [package validation](https://learn.microsoft.com/dotnet/fundamentals/package-validation/overview): it fails on API differences between target frameworks and on breaking changes since the last published version (`PackageValidationBaselineVersion`). Intentional differences are listed in `Rotativa.AspNetCore/CompatibilitySuppressions.xml`. After publishing a release, update the baseline version to it.
+
 
 ## rotativa.io
 

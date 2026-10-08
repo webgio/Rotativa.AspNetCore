@@ -24,13 +24,21 @@ jobs:
         run: dotnet build Rotativa.AspNetCore/Rotativa.AspNetCore.csproj -c Release
 
   test:
-    name: Unit and integration tests (Linux)
+    name: Tests against ${{ matrix.source }} (Linux)
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # project: demo app references the library project.
+        # package: demo app references the packed .nupkg, to test the package itself.
+        source: [project, package]
     steps:
       - uses: actions/checkout@v7
 
       - name: Build test image
-        run: docker build -f Rotativa.AspNetCore.Tests/Dockerfile -t rotativa-tests .
+        run: >
+          docker build -f Rotativa.AspNetCore.Tests/Dockerfile -t rotativa-tests
+          --build-arg USE_ROTATIVA_PACKAGE=${{ matrix.source == 'package' }} .
 
       - name: Run tests
         run: docker run --rm rotativa-tests
