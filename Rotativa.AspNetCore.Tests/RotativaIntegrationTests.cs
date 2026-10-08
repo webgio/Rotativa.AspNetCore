@@ -15,14 +15,36 @@ namespace Rotativa.AspNetCore.Tests
 {
 
     [Trait("Rotativa.AspNetCore", "accessing the demo site home page")]
-    public class RotativaIntegrationTests    
+    public class RotativaIntegrationTests : IDisposable
     {
         ChromeDriver selenium;
         StringBuilder verificationErrors;
 
+        // The demo site to test against. Override with ROTATIVA_DEMO_URL (e.g. "http://localhost:5000" on Linux/CI).
+        public static IEnumerable<object[]> DemoSites => new[]
+        {
+            new object[] { Environment.GetEnvironmentVariable("ROTATIVA_DEMO_URL") ?? "https://localhost:56246", "Asp.net 10" }
+        };
+
+        // Run Chrome headless when ROTATIVA_TESTS_HEADLESS is set, or on CI servers (which set CI=true).
+        static bool Headless =>
+            IsTrue(Environment.GetEnvironmentVariable("ROTATIVA_TESTS_HEADLESS")) || IsTrue(Environment.GetEnvironmentVariable("CI"));
+
+        static bool IsTrue(string? value) => value == "1" || string.Equals(value, "true", StringComparison.OrdinalIgnoreCase);
+
         public  RotativaIntegrationTests()
         {
-            selenium = new ChromeDriver();
+            var options = new ChromeOptions();
+            if (Headless)
+            {
+                // --no-sandbox and --disable-dev-shm-usage let Chrome start inside containers.
+                options.AddArguments("--headless=new", "--no-sandbox", "--disable-dev-shm-usage");
+            }
+            // Optional path to a Chrome/Chromium binary, for machines where Selenium can't find or download one.
+            var chromeBinary = Environment.GetEnvironmentVariable("ROTATIVA_CHROME_BINARY");
+            if (!string.IsNullOrEmpty(chromeBinary)) options.BinaryLocation = chromeBinary;
+
+            selenium = new ChromeDriver(options);
             //selenium = new InternetExplorerDriver();
             selenium.Manage().Timeouts().ImplicitWait = new TimeSpan(0, 0, 10);
             verificationErrors = new StringBuilder();
@@ -37,7 +59,7 @@ namespace Rotativa.AspNetCore.Tests
         //[InlineData("http://localhost:64310", "Asp.net core 2.0")]
         //[InlineData("https://localhost:44375", "Asp.net core 3.1")]
         //[InlineData("https://localhost:7059", "Asp.net 6")]
-        [InlineData("https://localhost:56246", "Asp.net 8")]
+        [MemberData(nameof(DemoSites))]
         public void Is_the_site_reachable(string url, string site)
         {
             selenium.Navigate().GoToUrl(url);
@@ -49,7 +71,7 @@ namespace Rotativa.AspNetCore.Tests
         //[InlineData("http://localhost:64310", "Asp.net core 2.0")]
         //[InlineData("https://localhost:44375", "Asp.net core 3.1")]
         //[InlineData("https://localhost:7059", "Asp.net 6")]
-        [InlineData("https://localhost:56246", "Asp.net 8")]
+        [MemberData(nameof(DemoSites))]
         public async Task Contact_PDF_ViewData(string url, string site)
         {
             selenium.Navigate().GoToUrl(url);
@@ -73,7 +95,7 @@ namespace Rotativa.AspNetCore.Tests
         //[InlineData("http://localhost:64310", "Asp.net core 2.0")]
         //[InlineData("https://localhost:44375", "Asp.net core 3.1")]
         //[InlineData("https://localhost:7059", "Asp.net 6")]
-        [InlineData("https://localhost:56246", "Asp.net 8")]
+        [MemberData(nameof(DemoSites))]
         public async Task Contact_PDF_SpecialCharacters(string url, string site)
         {
             selenium.Navigate().GoToUrl(url);
@@ -95,7 +117,7 @@ namespace Rotativa.AspNetCore.Tests
         //[InlineData("http://localhost:64310", "Asp.net core 2.0")]
         //[InlineData("https://localhost:44375", "Asp.net core 3.1")]
         //[InlineData("https://localhost:7059", "Asp.net 6")]
-        [InlineData("https://localhost:56246", "Asp.net 8")]
+        [MemberData(nameof(DemoSites))]
         public async Task Can_create_png_image(string url, string site)
         {
             selenium.Navigate().GoToUrl(url);
@@ -106,10 +128,10 @@ namespace Rotativa.AspNetCore.Tests
             using (var wc = new HttpClient())
             {
                 var imageResult = await wc.GetAsync(new Uri(pdfHref));
-                var image = Image.FromStream(imageResult.Content.ReadAsStream());
+                var image = await imageResult.Content.ReadAsByteArrayAsync();
 
-                Assert.NotNull(image);
-                Assert.Equal(image.RawFormat, System.Drawing.Imaging.ImageFormat.Png);
+                // PNG file signature; checked directly because System.Drawing is Windows-only.
+                Assert.True(image.AsSpan().StartsWith(new byte[] { 0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A }));
             }
         }
 
@@ -117,7 +139,7 @@ namespace Rotativa.AspNetCore.Tests
         //[InlineData("http://localhost:64310", "Asp.net core 2.0")]
         //[InlineData("https://localhost:44375", "Asp.net core 3.1")]
         //[InlineData("https://localhost:7059", "Asp.net 6")]
-        [InlineData("https://localhost:56246", "Asp.net 8")]
+        [MemberData(nameof(DemoSites))]
         public async Task Can_create_jpg_image(string url, string site)
         {
             selenium.Navigate().GoToUrl(url);
@@ -128,10 +150,10 @@ namespace Rotativa.AspNetCore.Tests
             using (var wc = new HttpClient())
             {
                 var imageResult = await wc.GetAsync(new Uri(pdfHref));
-                var image = Image.FromStream(imageResult.Content.ReadAsStream());
+                var image = await imageResult.Content.ReadAsByteArrayAsync();
 
-                Assert.NotNull(image);
-                Assert.Equal(image.RawFormat, System.Drawing.Imaging.ImageFormat.Jpeg);
+                // JPEG SOI marker; checked directly because System.Drawing is Windows-only.
+                Assert.True(image.AsSpan().StartsWith(new byte[] { 0xFF, 0xD8, 0xFF }));
             }
         }
 
