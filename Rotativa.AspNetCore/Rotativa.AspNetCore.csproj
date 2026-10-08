@@ -10,7 +10,11 @@
 		<Company>Viva Software di Bozio Giorgio</Company>
 		<Authors>Giorgio Bozio</Authors>
 		<Description>Rotativa: PDF easy creation for Asp.Net Core, Asp.Net 6, Asp.Net 8 and Asp.Net 10</Description>
-		<PackageReleaseNotes>Multi target enabling .net core 3.1, .net 5, .net 6, .net 7, .net 8, .net 10</PackageReleaseNotes>
+		<PackageReleaseNotes>1.5.0
+- Added .NET 10 support. The package targets .NET Standard 2.0, .NET Core 3.1, .NET 5, 6, 7, 8 and 10.
+- .NET Standard 2.0 (used by .NET Framework apps): the Microsoft.AspNetCore.Mvc dependency moves from 2.2.0 to 2.3.13, which brings patched versions of Newtonsoft.Json, System.Text.Encodings.Web and System.Security.Cryptography.Xml. ASP.NET Core 2.3 is the version Microsoft supports on .NET Framework; it is based on 2.1, so apps that use ASP.NET Core 2.2 packages will be moved up to 2.3.13 and any 2.2-only APIs are not available.
+- Linux and macOS: Rotativa looks for wkhtmltopdf and wkhtmltoimage without the .exe extension. Use the native builds for your platform from https://wkhtmltopdf.org/downloads.html.
+- No changes to the public API.</PackageReleaseNotes>
 		<PackageTags>PDF AspNetCore</PackageTags>
 		<Copyright>2026 Viva Software di Bozio Giorgio</Copyright>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
