@@ -32,17 +32,7 @@ ENV DOTNET_NOLOGO=1 \
 WORKDIR /src
 COPY . .
 
-RUN if [ "$UseRotativaPackage" = "true" ]; then \
-        dotnet pack Rotativa.AspNetCore -c Release -o artifacts/packages -p:GeneratePackageOnBuild=false \
-        && version=$(dotnet msbuild Rotativa.AspNetCore/Rotativa.AspNetCore.csproj -getProperty:Version) \
-        && dotnet restore Rotativa.AspNetCore.DemoApp --configfile Rotativa.AspNetCore.Tests/package-test.nuget.config -p:RotativaPackageVersion=$version \
-        && dotnet build Rotativa.AspNetCore.DemoApp --no-restore -p:RotativaPackageVersion=$version \
-        && grep -A1 "\"Rotativa.AspNetCore/$version\": {" Rotativa.AspNetCore.DemoApp/bin/Debug/net10.0/Rotativa.AspNetCore.DemoApp.deps.json \
-            | grep -q '"type": "package"' ; \
-    else \
-        dotnet build Rotativa.AspNetCore.DemoApp ; \
-    fi \
-    && dotnet build Rotativa.AspNetCore.Tests \
+RUN bash Rotativa.AspNetCore.Tests/build-demo.sh \
     && ln -sf /usr/local/bin/wkhtmltopdf Rotativa.AspNetCore.DemoApp/wwwroot/Rotativa/wkhtmltopdf \
     && ln -sf /usr/local/bin/wkhtmltoimage Rotativa.AspNetCore.DemoApp/wwwroot/Rotativa/wkhtmltoimage
 

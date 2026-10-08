@@ -42,3 +42,30 @@ jobs:
 
       - name: Run tests
         run: docker run --rm rotativa-tests
+
+  test-windows:
+    name: Tests against ${{ matrix.source }} (Windows)
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        source: [project, package]
+    env:
+      # Plain HTTP avoids trusting the dev HTTPS certificate on the runner. CI=true makes Chrome run headless.
+      ROTATIVA_DEMO_URL: http://localhost:5000
+      UseRotativaPackage: ${{ matrix.source == 'package' }}
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Build
+        run: bash Rotativa.AspNetCore.Tests/build-demo.sh
+
+      - name: Run tests
+        run: bash Rotativa.AspNetCore.Tests/run-tests.sh
