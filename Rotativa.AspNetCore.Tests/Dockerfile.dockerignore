@@ -1,0 +1,7 @@
+**/bin
+**/obj
+**/.vs
+.vscode
+.git
+**/wwwroot/Rotativa/wkhtmltopdf
+**/wwwroot/Rotativa/wkhtmltoimage

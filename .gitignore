@@ -313,3 +313,7 @@ OpenCover/
 
 # Azure Stream Analytics local run output 
 ASALocalRun/
+
+# Local macOS/Linux wkhtmltopdf binaries (only the Windows .exe files are tracked)
+**/wwwroot/Rotativa/wkhtmltopdf
+**/wwwroot/Rotativa/wkhtmltoimage

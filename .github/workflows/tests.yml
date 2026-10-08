@@ -1,0 +1,36 @@
+name: Build and test
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build library (all target frameworks)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Build
+        run: dotnet build Rotativa.AspNetCore/Rotativa.AspNetCore.csproj -c Release
+
+  test:
+    name: Unit and integration tests (Linux)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Build test image
+        run: docker build -f Rotativa.AspNetCore.Tests/Dockerfile -t rotativa-tests .
+
+      - name: Run tests
+        run: docker run --rm rotativa-tests

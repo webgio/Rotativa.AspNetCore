@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Rotativa.AspNetCore.Tests
@@ -45,6 +46,8 @@ namespace Rotativa.AspNetCore.Tests
                 string currentText = PdfTextExtractor.GetTextFromPage(pdfDocument.GetPage(page), strategy);
 
                 currentText = Encoding.UTF8.GetString(ASCIIEncoding.Convert(Encoding.Default, Encoding.UTF8, Encoding.Default.GetBytes(currentText)));
+                // Some wkhtmltopdf builds (e.g. macOS) separate words with tabs, so compare on normalized whitespace.
+                currentText = Regex.Replace(currentText, @"\s+", " ");
                 if (currentText.Contains(text))
                     return true;
                 pdfReader.Close();
