@@ -1,7 +1,7 @@
 # Create PDFs and images with .NET
 
 Use Rotativa to transform a Razor view into a PDF or image.
-This package is compatible with .NET Core 3.1, .NET 5, .NET 6, .NET 7 and .NET 8.
+This package is compatible with .NET Core 3.1, .NET 5, .NET 6, .NET 7, .NET 8 and .NET 10.
 
 ## Install with nuget.org:
 
@@ -11,7 +11,7 @@ https://www.nuget.org/packages/Rotativa.AspNetCore
 Please give feedback!
 
 ## Needs configuration
-Basic configuration done in Program.cs (.NET 6 up to 8):
+Basic configuration done in Program.cs (.NET 6 up to 10):
 
 ```csharp
 app.UseRotativa();
@@ -22,7 +22,7 @@ or, if using .NET Core 3.1 and .NET 5:
 app.UseRotativa(env);
 ```
 
-Make sure you have a folder with the wkhtmltopdf.exe file accessible by the process running the web app. By default it searches in a folder named "Rotativa" in the root of the web app. If you need to change that use the optional parameter to the Setup call `RotativaConfiguration.Setup(env, "path/relative/to/root")`
+Make sure you have a folder with the wkhtmltopdf.exe file (and wkhtmltoimage.exe for images) accessible by the process running the web app. On Linux and macOS the files are named wkhtmltopdf and wkhtmltoimage, without the .exe extension: use the builds for your platform from https://wkhtmltopdf.org/downloads.html. By default it searches in a folder named "Rotativa" in the root of the web app. If you need to change that use the optional parameter to the Setup call `RotativaConfiguration.Setup(env, "path/relative/to/root")`
 
 ## Usage
 
