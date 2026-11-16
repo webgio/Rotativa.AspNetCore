@@ -2,6 +2,7 @@
 using Rotativa.AspNetCore.DemoApp.Models;
 using System.Diagnostics;
 using Rotativa.AspNetCore.Options;
+using System.Data.Common;
 
 namespace Rotativa.AspNetCore.DemoApp.Controllers
 {
@@ -28,6 +29,22 @@ namespace Rotativa.AspNetCore.DemoApp.Controllers
         public IActionResult Privacy()
         {
             return new ViewAsPdf();
+        }
+
+        public IActionResult EphemerideWithAction()
+        {
+            return new ActionAsPdf("Ephemeride", new { d=DateTime.Now , day= DateTime.Now.DayOfWeek.ToString() } );
+        }
+
+        public IActionResult Ephemeride( DateTime d, string day)
+        {
+            Ephemeride ephemeride = new Ephemeride();
+            ephemeride.DateOfTheDay = d;
+            ephemeride.TheDayToday = day;
+
+            ViewBag.testViewBag = new List<string> { "val 1", " val 2" };
+
+            return View("EphemerideDemo", ephemeride);
         }
 
         public IActionResult ContactImage()
