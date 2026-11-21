@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using Rotativa.AspNetCore.Options;
@@ -368,8 +369,52 @@ namespace Rotativa.AspNetCore
                 return html.ToString();
             }
 
-            string baseUrl = string.Format("{0}://{1}", context.HttpContext.Request.Scheme, context.HttpContext.Request.Host);
+            string baseUrl = this.GetBaseUrl(context.HttpContext);
             return Regex.Replace(html.ToString(), "<head>", string.Format("<head><base href=\"{0}\" />", baseUrl), RegexOptions.IgnoreCase);
+        }
+
+        /// <summary>
+        /// Gets the base URL added to the HTML. wkhtmltopdf uses it to load images, CSS and scripts with relative paths.
+        /// By default it is the address the browser used.
+        /// </summary>
+        /// <param name="httpContext">The HTTP context of the current request</param>
+        /// <returns>The base URL, for example "https://localhost:5001"</returns>
+        protected virtual string GetBaseUrl(HttpContext httpContext)
+        {
+            var request = httpContext.Request;
+            var host = request.Host;
+            var localPort = httpContext.Connection.LocalPort;
+
+            // Inside a container, localhost is the container itself. wkhtmltopdf runs there too,
+            // so it can't reach the port the browser used, for example 5001 in "docker run -p 5001:8080".
+            // Use the port the app listens on inside the container instead (8080).
+            if (IsRunningInContainer() && IsLocalhost(host.Host) && localPort > 0 && host.Port != localPort)
+            {
+                host = new HostString(host.Host, localPort);
+            }
+
+            return string.Format("{0}://{1}", request.Scheme, host);
+        }
+
+        private static bool IsRunningInContainer()
+        {
+            // Microsoft's .NET container images set this variable.
+            return Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER") == "true";
+        }
+
+        private static bool IsLocalhost(string host)
+        {
+            if (string.IsNullOrEmpty(host))
+            {
+                return false;
+            }
+
+            if (string.Equals(host, "localhost", StringComparison.OrdinalIgnoreCase))
+            {
+                return true;
+            }
+
+            return IPAddress.TryParse(host.Trim('[', ']'), out var address) && IPAddress.IsLoopback(address);
         }
     }
 }

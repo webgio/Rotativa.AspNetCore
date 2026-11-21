@@ -85,6 +85,16 @@ By default Rotativa injects a base url in the head section of the HTML. This can
 return new ViewAsImage(setBaseUrl: false);
 ```
 
+The base url is the address your browser used. wkhtmltopdf uses it to load images and CSS, so use paths your app serves, such as `<img src="~/images/logo.png" />`, not paths on disk.
+
+In a container from Microsoft's .NET images, `docker run -p 5001:8080` works too: when you open `http://localhost:5001`, Rotativa uses port 8080, the port your app listens on inside the container.
+
+Behind a proxy, if images are missing, turn the base url off (`setBaseUrl: false`) and add your own in the `<head>` of your view, with an address your server can reach:
+
+```html
+<base href="http://localhost:8080/" />
+```
+
 The settings can be combined as well:
 
 ```csharp
