@@ -24,6 +24,28 @@ app.UseRotativa(env);
 
 Make sure you have a folder with the wkhtmltopdf.exe file (and wkhtmltoimage.exe for images) accessible by the process running the web app. On Linux and macOS the files are named wkhtmltopdf and wkhtmltoimage, without the .exe extension: use the builds for your platform from https://wkhtmltopdf.org/downloads.html. By default it searches in a folder named "Rotativa" in the root of the web app. If you need to change that use the optional parameter to the Setup call `RotativaConfiguration.Setup(env, "path/relative/to/root")`
 
+### A maintained wkhtmltopdf, with no binary to manage
+
+Rotativa runs `wkhtmltopdf` from `wwwroot/Rotativa`. On current systems that
+binary is the problem: archived since 2023, no build for Ubuntu 24.04 or
+newer, `libssl.so.1.1` failures on Heroku-24.
+
+`Marqius.Wkhtmltopdf` is a maintained drop-in — the same command and options,
+built from scratch, one statically linked file, no Qt, no X server — and it
+puts the program where Rotativa looks for it. Two lines in `Program.cs`:
+
+```csharp
+Wkhtmltopdf.Install(Path.Combine(app.Environment.WebRootPath, "Rotativa"));
+RotativaConfiguration.Setup(app.Environment.WebRootPath, "Rotativa");
+```
+
+The package brings the program for your platform (Windows x64, Linux x64 and
+ARM64 including Alpine, Apple silicon). The full guide, tested on every
+build: https://github.com/marqiushq/marqius-wkhtmltopdf-dotnet
+
+The Community licence is free for personal and open-source projects;
+businesses need a commercial licence.
+
 ## Usage
 
 This package should work almost exactly as Rotativa https://github.com/webgio/Rotativa.
